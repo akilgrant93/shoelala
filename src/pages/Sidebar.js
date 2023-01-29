@@ -1,17 +1,39 @@
 import React from 'react'
 
-export default function Sidebar() {
+export default function Sidebar(props) {
+
   return (
     <div className='px-5  w-full'>
       <p className='pb-5 font-semibold'>Filter</p>
 
       <ul className='pb-5 rounded-lg bg-white shadow-lg'>
         <li className='font-semibold border-b border-slate-200 px-5 py-3 mb-2'>BRAND</li>
-        <li className='px-5 py-1 text-xs'><input type="checkbox" id="jordan" name="jordan" value="jordan" />
+        <li className='px-5 py-1 text-xs'>
+          <input
+          type="checkbox"
+          checked={props.isJordan}
+          onChange={props.handleOnChange}
+          id="jordan"
+          name="jordan"
+          value="jordan" />
         <label className='pl-2' for="jordan">Air Jordan</label></li>
-        <li className='px-5 py-1 text-xs'><input type="checkbox" id="nike" name="nike" value="nike" />
+        <li className='px-5 py-1 text-xs'>
+          <input
+          type="checkbox"
+          checked={props.isNike}
+          onChange={props.handleOnChange}
+          id="nike"
+          name="nike"
+          value="nike" />
         <label className='pl-2' for="nike">Nike</label></li>
-        <li className='px-5 py-1 text-xs'><input type="checkbox" id="adidas" name="adidas" value="adidas" />
+        <li className='px-5 py-1 text-xs'>
+          <input
+          type="checkbox"
+          checked={props.isAdidas}
+          onChange={props.handleOnChange}
+          id="adidas"
+          name="adidas"
+          value="adidas" />
         <label className='pl-2' for="adidas">Adidas</label></li>
       </ul>
 
