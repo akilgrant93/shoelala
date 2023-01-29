@@ -54,7 +54,7 @@ export default function Sidebar(props) {
           <input
           type="checkbox"
           checked={props.is20}
-          onChange={props.priceChange}
+          onChange={props.itemAmountChange}
           id="20"
           name="20"
           value="20" />
@@ -63,7 +63,7 @@ export default function Sidebar(props) {
           <input
           type="checkbox"
           checked={props.is40}
-          onChange={props.priceChange}
+          onChange={props.itemAmountChange}
           id="40"
           name="40"
           value="40" />
@@ -72,7 +72,7 @@ export default function Sidebar(props) {
         <input
         type="checkbox"
         checked={props.is100}
-        onChange={props.priceChange}
+        onChange={props.itemAmountChange}
         id="100"
         name="100"
         value="100" />

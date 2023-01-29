@@ -15,7 +15,7 @@ const Home = () => {
   const [ is40, setIs40 ] = useState(false)
   const [ is100, setIs100 ] = useState(false)
   const [ limit, setLimit ] = useState(20)
-  const [ priceMinimum, setPriceMinimum ] = useState(null)
+  const [ priceMinimum, setPriceMinimum ] = useState(0)
   const [ priceMaximum, setPriceMaximum ] = useState(null)
 
   // const shoesRef = firebase.firestore().collection('shoes').where('category', '!=', false).orderBy('category', 'desc')
@@ -45,7 +45,7 @@ const Home = () => {
     }
   };
 
-  const priceChange = (e) => {
+  const itemAmountChange = (e) => {
     if(e.target.id === '20'){
       setIs20(!is20)
       setLimit(20)
@@ -73,7 +73,7 @@ const Home = () => {
     } else if(selectedBrand !== false && selectedBrand === 'jordan'){
       shoesRef = firebase.firestore().collection('shoes').where('category', '==', 'Air Jordan')
     } else {
-      shoesRef = firebase.firestore().collection('shoes').where('category', '!=', false).orderBy('category')
+      shoesRef = firebase.firestore().collection('shoes').where('category', '!=', false).orderBy('category','desc')
     }
 
     shoesRef
@@ -97,13 +97,13 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="container">
+      <main>
         <div className="py-20 px-60 mx-auto">
         <p className='text-center font-bold py-5 text-xl'> SHOP ALL SNEAKERS</p>
         <p className='text-center text-xs'>The vault goes deep at Shoelala. Shop for new releases from must-have names like Air Jordan, Nike, New Balance and Yeezy, along with the latest collaborations from brands like Vans, Reebok, Converse, ASICS, and more. </p>
         </div>
-        <div className="flex bg-slate-100 pt-5">
-        <Sidebar priceChange={priceChange} is20={is20} is40={is40} is100={is100} isNike={isNike} isJordan={isJordan} isAdidas={isAdidas} categoryChange={categoryChange}/>
+        <div className="flex pt-5 w-full  bg-slate-100">
+        <Sidebar itemAmountChange={itemAmountChange} is20={is20} is40={is40} is100={is100} isNike={isNike} isJordan={isJordan} isAdidas={isAdidas} categoryChange={categoryChange}/>
         <div>
         <p className='pb-5 font-semibold'>Results</p>
 
