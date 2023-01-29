@@ -24,21 +24,21 @@ const Home = () => {
     if(e.target.id === 'adidas'){
       setIsAdidas(!isAdidas)
       if(selectedBrand !== 'adidas'){setSelectedBrand('adidas')}
-      if(selectedBrand === 'adidas'){setSelectedBrand(null)}
+      if(selectedBrand === 'adidas'){setSelectedBrand(false)}
 
       if(isJordan){setIsJordan(!isJordan)}
       if(isNike){setIsNike(!isNike)}
     } else if (e.target.id === 'nike'){
       setIsNike(!isNike)
       if(selectedBrand !== 'nike'){setSelectedBrand('nike')}
-      if(selectedBrand === 'nike'){setSelectedBrand(null)}
+      if(selectedBrand === 'nike'){setSelectedBrand(false)}
 
       if(isAdidas){setIsAdidas(!isAdidas)}
       if(isJordan){setIsJordan(!isJordan)}
     } else if (e.target.id === 'jordan'){
       setIsJordan(!isJordan)
       if(selectedBrand !== 'jordan'){setSelectedBrand('jordan')}
-      if(selectedBrand === 'jordan'){setSelectedBrand(null)}
+      if(selectedBrand === 'jordan'){setSelectedBrand(false)}
 
       if(isNike){setIsNike(!isNike)}
       if(isAdidas){setIsAdidas(!isAdidas)}
@@ -67,13 +67,13 @@ const Home = () => {
 
   useEffect(() => {
     let shoesRef
-    //category routes
+
     if(selectedBrand !== false && selectedBrand !== 'jordan'){
-      shoesRef = firebase.firestore().collection('shoes').where('category', '==', selectedBrand[0].toUpperCase()+selectedBrand.slice(1)).orderBy('category', 'desc')
+      shoesRef = firebase.firestore().collection('shoes').where('category', '==', selectedBrand[0].toUpperCase()+selectedBrand.slice(1))
     } else if(selectedBrand !== false && selectedBrand === 'jordan'){
-      shoesRef = firebase.firestore().collection('shoes').where('category', '==', 'Air Jordan').orderBy('category', 'desc')
+      shoesRef = firebase.firestore().collection('shoes').where('category', '==', 'Air Jordan')
     } else {
-      shoesRef = firebase.firestore().collection('shoes').where('category', '!=', false).orderBy('category', 'desc')
+      shoesRef = firebase.firestore().collection('shoes').where('category', '!=', false).orderBy('category')
     }
 
     shoesRef
