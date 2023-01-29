@@ -6,8 +6,8 @@ import Sidebar from "./Sidebar"
 
 const Home = () => {
   const [shoes, setShoes] = useState([])
-  const [ selectedBrand, setSelectedBrand ] = useState(null)
-  const [ isChecked, setIsChecked ] = useState(false)
+  const [ selectedBrand, setSelectedBrand ] = useState(false)
+  // const [ isChecked, setIsChecked ] = useState(false)
   const [ isAdidas, setIsAdidas ] = useState(false)
   const [ isNike, setIsNike ] = useState(false)
   const [ isJordan, setIsJordan ] = useState(false)
@@ -18,19 +18,28 @@ const Home = () => {
   const [ priceMinimum, setPriceMinimum ] = useState(null)
   const [ priceMaximum, setPriceMaximum ] = useState(null)
 
-  const shoesRef = firebase.firestore().collection('shoes').orderBy('title')
+  // const shoesRef = firebase.firestore().collection('shoes').where('category', '!=', false).orderBy('category', 'desc')
 
   const categoryChange = (e) => {
     if(e.target.id === 'adidas'){
       setIsAdidas(!isAdidas)
+      if(selectedBrand !== 'adidas'){setSelectedBrand('adidas')}
+      if(selectedBrand === 'adidas'){setSelectedBrand(null)}
+
       if(isJordan){setIsJordan(!isJordan)}
       if(isNike){setIsNike(!isNike)}
     } else if (e.target.id === 'nike'){
       setIsNike(!isNike)
+      if(selectedBrand !== 'nike'){setSelectedBrand('nike')}
+      if(selectedBrand === 'nike'){setSelectedBrand(null)}
+
       if(isAdidas){setIsAdidas(!isAdidas)}
       if(isJordan){setIsJordan(!isJordan)}
     } else if (e.target.id === 'jordan'){
       setIsJordan(!isJordan)
+      if(selectedBrand !== 'jordan'){setSelectedBrand('jordan')}
+      if(selectedBrand === 'jordan'){setSelectedBrand(null)}
+
       if(isNike){setIsNike(!isNike)}
       if(isAdidas){setIsAdidas(!isAdidas)}
     }
@@ -57,6 +66,16 @@ const Home = () => {
 
 
   useEffect(() => {
+    let shoesRef
+    //category routes
+    if(selectedBrand !== false && selectedBrand !== 'jordan'){
+      shoesRef = firebase.firestore().collection('shoes').where('category', '==', selectedBrand[0].toUpperCase()+selectedBrand.slice(1)).orderBy('category', 'desc')
+    } else if(selectedBrand !== false && selectedBrand === 'jordan'){
+      shoesRef = firebase.firestore().collection('shoes').where('category', '==', 'Air Jordan').orderBy('category', 'desc')
+    } else {
+      shoesRef = firebase.firestore().collection('shoes').where('category', '!=', false).orderBy('category', 'desc')
+    }
+
     shoesRef
     .limit(limit)
     .onSnapshot(
