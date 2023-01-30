@@ -84,7 +84,7 @@ export default function Adidas({ alertOnBottom }) {
       .orderBy('title')
 
     shoesRef
-    .limit(limit)
+    .limit(20)
     .startAfter(lastVisibleDoc.title)
     .onSnapshot(
       querySnapshot => {

@@ -83,7 +83,7 @@ export default function Jordan({ alertOnBottom }) {
       .orderBy('title')
 
     shoesRef
-    .limit(limit)
+    .limit(20)
     .startAfter(lastVisibleDoc.title)
     .onSnapshot(
       querySnapshot => {
