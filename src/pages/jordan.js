@@ -107,9 +107,15 @@ export default function Jordan({ alertOnBottom }) {
 
       <main className='box' ref={containerRef}>
         <NavBar />
-        <div className="py-20 px-60 mx-auto">
-        <p className='text-center font-bold py-5 text-xl'> SHOP JORDANS</p>
-        <p className='text-center text-xs'>The vault goes deep at Shoelala. Shop for new releases from must-have names like Air Jordan, Nike, New Balance and Yeezy, along with the latest collaborations from brands like Vans, Reebok, Converse, ASICS, and more.</p>
+        <div className="py-20 px-60 mx-auto"
+        style={{
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',backgroundImage: "url(/pexels-terrance-barksdale-10112911.jpg)" }}>
+        <div style={{backgroundColor:'rgba(255,255,255,.75)'}} className='rounded-md shadow-lg p-5 mt-16'>
+        <p className='text-center font-bold pb-5 text-xl'> SHOP JORDANS</p>
+        <p className='text-center text-xs'>The vault goes deep at Shoelala. Shop for new releases from must-have names like Nike, Nike, New Balance and Yeezy, along with the latest collaborations from brands like Vans, Reebok, Converse, ASICS, and more.</p>
+        </div>
         </div>
         <div className="flex pt-5 pb-20 w-full bg-slate-100">
         <Sidebar type={'category'}/>
