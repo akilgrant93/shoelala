@@ -8,7 +8,7 @@ export default function Sidebar(props) {
 
       <ul className='pb-5 rounded-lg bg-white shadow-lg'>
         <li className='font-semibold border-b border-slate-200 px-5 py-3 mb-2'>BRAND</li>
-        <li className='px-5 py-1 text-xs'>
+        <li className='px-5 py-1 text-xs flex content-center'>
           <input
           type="checkbox"
           checked={props.isJordan}
@@ -17,7 +17,7 @@ export default function Sidebar(props) {
           name="jordan"
           value="jordan" />
         <label className='pl-2' htmlFor="jordan">Air Jordan</label></li>
-        <li className='px-5 py-1 text-xs'>
+        <li className='px-5 py-1 text-xs flex content-center'>
           <input
           type="checkbox"
           checked={props.isNike}
@@ -26,7 +26,7 @@ export default function Sidebar(props) {
           name="nike"
           value="nike" />
         <label className='pl-2' htmlFor="nike">Nike</label></li>
-        <li className='px-5 py-1 text-xs'>
+        <li className='px-5 py-1 text-xs flex content-center'>
           <input
           type="checkbox"
           checked={props.isAdidas}
@@ -61,7 +61,7 @@ export default function Sidebar(props) {
 
       <ul className='pb-5 rounded-lg bg-white shadow-lg mt-5'>
         <li className='font-semibold border-b border-slate-200 px-5 py-3 mb-2'>ITEMS</li>
-        <li className='px-5 py-1 text-xs'>
+        <li className='px-5 py-1 text-xs flex content-center'>
           <input
           type="checkbox"
           checked={props.is20}
@@ -70,7 +70,7 @@ export default function Sidebar(props) {
           name="20"
           value="20" />
         <label className='pl-2' htmlFor="20">20</label></li>
-        <li className='px-5 py-1 text-xs'>
+        <li className='px-5 py-1 text-xs flex content-center'>
           <input
           type="checkbox"
           checked={props.is40}
@@ -79,7 +79,7 @@ export default function Sidebar(props) {
           name="40"
           value="40" />
         <label className='pl-2' htmlFor="40">40</label></li>
-        <li className='px-5 py-1 text-xs'>
+        <li className='px-5 py-1 text-xs flex content-center'>
         <input
         type="checkbox"
         checked={props.is100}

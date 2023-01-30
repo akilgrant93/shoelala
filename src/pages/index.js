@@ -1,19 +1,18 @@
 import { firebase } from "config"
 import Head from "next/head"
-import React, {useState, useEffect, useRef} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import ListItem from "./ListItem"
 import Sidebar from "./Sidebar"
-import InfiniteScroll from 'react-infinite-scroll-component';
+import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 
-const Home = () => {
+const Home = ({ alertOnBottom }) => {
   const [shoes, setShoes] = useState([])
   const [ selectedBrand, setSelectedBrand ] = useState(false)
   const [ firstEntry, setFirstEntry ] = useState('')
   const [ firstVisibleDoc, setFirstVisibleDoc ] = useState("");
   const [ lastVisibleDoc, setLastVisibleDoc ] = useState("");
   const [loadMore, setLoadMore] = useState(false);//certain actions are performed in useFirestore.jsx in order to make loadMore properly work
-  const virtualKeywords = useRef(null);//used for search bar feature (also loading more items for search bar depends on this reference)
-
+  const [scrollTop, setScrollTop] = useState(0);
   const [ isAdidas, setIsAdidas ] = useState(false)
   const [ isNike, setIsNike ] = useState(false)
   const [ isJordan, setIsJordan ] = useState(false)
@@ -76,13 +75,40 @@ const Home = () => {
     setPriceMaximum(e.target.value)
   }
 
+  const handleOnDocumentBottom = () => {
+    if(shoes.length % 20 === 0){
+      getNextShoes()
+    }
+  };
+
+  const handleContainerOnBottom = useCallback(() => {
+    console.log('I am at bottom in optional container! ' + Math.round(performance.now()));
+
+    if (alertOnBottom) {
+      alert('Bottom of this container hit!');
+    }
+  }, [alertOnBottom]);
+
+    /* This will trigger handleOnDocumentBottom when the body of the page hits the bottom */
+    useBottomScrollListener(handleOnDocumentBottom);
+
+    /* This will trigger handleOnContainerBottom when the container that is passed the ref hits the bottom */
+    const containerRef = useBottomScrollListener(handleContainerOnBottom);
+
   useEffect(() => {
     let shoesRef
 
+    const handleScroll = event => {
+      setScrollTop(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+
     if(selectedBrand !== false && selectedBrand !== 'jordan'){
-      shoesRef = firebase.firestore().collection('shoes').where('category', '==', selectedBrand[0].toUpperCase()+selectedBrand.slice(1))
+      shoesRef = firebase.firestore().collection('shoes').where('category', '==', selectedBrand[0].toUpperCase()+selectedBrand.slice(1)).orderBy('price')
     } else if(selectedBrand !== false && selectedBrand === 'jordan'){
-      shoesRef = firebase.firestore().collection('shoes').where('category', '==', 'Air Jordan')
+      shoesRef = firebase.firestore().collection('shoes').where('category', '==', 'Air Jordan').orderBy('price')
     } else {
       shoesRef = firebase.firestore().collection('shoes').orderBy('price').where('price', '>=', priceMinimum === '' ? 0 : parseInt(priceMinimum))
       .where('price', '<=', priceMaximum === '' ? 1000 : parseInt(priceMaximum) )
@@ -103,17 +129,22 @@ const Home = () => {
         setLastVisibleDoc(shoesArr[shoesArr.length-1])
       }
     )
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+
+
     }, [selectedBrand, limit, priceMaximum, priceMinimum])
 
     const getNextShoes = () => {
       let shoesRef
-
     if(selectedBrand !== false && selectedBrand !== 'jordan'){
       shoesRef = firebase.firestore().collection('shoes').where('category', '==', selectedBrand[0].toUpperCase()+selectedBrand.slice(1))
-      // .orderBy('title')
+      .orderBy('title')
     } else if(selectedBrand !== false && selectedBrand === 'jordan'){
       shoesRef = firebase.firestore().collection('shoes').where('category', '==', 'Air Jordan')
-      // .orderBy('title')
+      .orderBy('title')
     } else {
       shoesRef = firebase.firestore().collection('shoes').orderBy('price').where('price', '>=', priceMinimum === '' ? 0 : parseInt(priceMinimum))
       .where('price', '<=', priceMaximum === '' ? 1000 : parseInt(priceMaximum))
@@ -129,39 +160,7 @@ const Home = () => {
         querySnapshot.forEach((shoe) => {
           shoesArr.push({...shoe.data(), id: shoe.id})
         })
-        console.log(shoesArr)
-        setShoes(shoesArr)
-        setFirstVisibleDoc(shoesArr[0])
-        setLastVisibleDoc(shoesArr[shoesArr.length-1])
-      }
-      )
-    }
-
-    const getPrevShoes = () => {
-      let shoesRef
-
-    if(selectedBrand !== false && selectedBrand !== 'jordan'){
-      shoesRef = firebase.firestore().collection('shoes').where('category', '==', selectedBrand[0].toUpperCase()+selectedBrand.slice(1))
-    } else if(selectedBrand !== false && selectedBrand === 'jordan'){
-      shoesRef = firebase.firestore().collection('shoes').where('category', '==', 'Air Jordan')
-    } else {
-      shoesRef = firebase.firestore().collection('shoes').orderBy('price').where('price', '>=', priceMinimum === '' ? 0 : parseInt(priceMinimum))
-      .where('price', '<=', priceMaximum === '' ? 1000 : parseInt(priceMaximum))
-
-    }
-
-    shoesRef
-    .limit(limit)
-    .endAt(firstVisibleDoc.price)
-    .limitToLast(limit)
-    // .endBefore(lastVisibleDoc.price)
-    .onSnapshot(
-      querySnapshot => {
-        const shoesArr = []
-        querySnapshot.forEach((shoe) => {
-          shoesArr.push({...shoe.data(), id: shoe.id})
-        })
-        setShoes(shoesArr)
+        setShoes([...shoes,...shoesArr])
         setFirstVisibleDoc(shoesArr[0])
         setLastVisibleDoc(shoesArr[shoesArr.length-1])
       }
@@ -176,37 +175,21 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
+      <main className='box' ref={containerRef}>
         <div className="py-20 px-60 mx-auto">
         <p className='text-center font-bold py-5 text-xl'> SHOP ALL SNEAKERS</p>
-        <p className='text-center text-xs'>The vault goes deep at Shoelala. Shop for new releases from must-have names like Air Jordan, Nike, New Balance and Yeezy, along with the latest collaborations from brands like Vans, Reebok, Converse, ASICS, and more. </p>
+        <p className='text-center text-xs'>The vault goes deep at Shoelala. Shop for new releases from must-have names like Air Jordan, Nike, New Balance and Yeezy, along with the latest collaborations from brands like Vans, Reebok, Converse, ASICS, and more.</p>
         </div>
-        <div className="flex pt-5 w-full  bg-slate-100">
+        <div className="flex pt-5 pb-20 w-full bg-slate-100">
         <Sidebar priceMaximum={priceMaximum} maximumChange={maximumChange} priceMinimum={priceMinimum} minimumChange={minimumChange} itemAmountChange={itemAmountChange} is20={is20} is40={is40} is100={is100} isNike={isNike} isJordan={isJordan} isAdidas={isAdidas} categoryChange={categoryChange}/>
         <div>
-        <p className='pb-5 font-semibold w-full justify-space-between flex'>Results
-        <span>
-
-        <span
-        className='px-10'
-        onClick={shoes.length && shoes[0].title === firstEntry.title
-        ? null
-        : getPrevShoes}
-        >{'<'}</span>
-
-        <span
-        className='px-10'
-        onClick={shoes.length === limit
-        ? getNextShoes
-        : null}
-        >{'>'}</span>
-          </span></p>
-
-        <ul className='flex flex-wrap pb-10 pr-20'>
+        <p className='pb-5 font-semibold w-full justify-space-between flex'>Results</p>
+        <ul className='flex flex-wrap pb-10 pr-20 max-h-8/10'>
           {shoes.map((shoe, index) => {
             return (<ListItem key={index} index={index} shoe={shoe}/>)
           })}
         </ul>
+
         </div>
         </div>
       </main>
