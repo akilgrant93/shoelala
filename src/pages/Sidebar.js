@@ -3,7 +3,7 @@ import React from 'react'
 export default function Sidebar(props) {
 
   return (
-    <div className='px-5  w-full'>
+    <div className='px-5'>
       <p className='pb-5 font-semibold'>Filter</p>
 
       <ul className='pb-5 rounded-lg bg-white shadow-lg'>
@@ -41,10 +41,21 @@ export default function Sidebar(props) {
         <p className='font-semibold border-b border-slate-200 px-5 py-3 mb-2'>PRICE</p>
         <form className='flex flex-col'>
         <p className='text-xs mx-5'>FROM</p>
-        <input className='mx-5 p-2' type="number" name="minimum" />
+        <input
+        className='bg-slate-100 mx-5 p-2 text-xs'
+        type="number"
+        min={0}
+        value={props.priceMinimum}
+        onChange={props.minimumChange}
+        name="minimum" />
         <p className='text-xs mx-5 mt-2'>TO</p>
-        <input className='mx-5 p-2' type="number" name="maximum" />
-        <p className='font-semibold border border-slate-200 mx-5 mt-2 px-5 py-3 text-center'>APPLY</p>
+        <input
+        className='bg-slate-100 mx-5 p-2 text-xs'
+        type="number"
+        min={0}
+        value={props.priceMaximum}
+        onChange={props.maximumChange}
+        name="maximum" />
         </form>
       </div>
 
