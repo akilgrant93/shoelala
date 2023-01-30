@@ -3,7 +3,9 @@ import React from 'react'
 export default function Sidebar(props) {
 
   return (
-    <div className='px-5'>
+    props.type
+    ? <div className='w-96'></div>
+    : <div className='px-5'>
       <p className='pb-5 font-semibold'>Filter</p>
 
       <ul className='pb-5 rounded-lg bg-white shadow-lg'>
@@ -91,6 +93,5 @@ export default function Sidebar(props) {
         </li>
       </ul>
       </div>
-
   )
 }

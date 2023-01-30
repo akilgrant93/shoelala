@@ -3,7 +3,9 @@ import Head from "next/head"
 import React, {useState, useEffect, useCallback} from 'react'
 import ListItem from "./ListItem"
 import Sidebar from "./Sidebar"
+import NavBar from "./NavBar"
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
+import { motion } from "framer-motion"
 
 const Home = ({ alertOnBottom }) => {
   const [shoes, setShoes] = useState([])
@@ -22,6 +24,21 @@ const Home = ({ alertOnBottom }) => {
   const [ limit, setLimit ] = useState(20)
   const [ priceMinimum, setPriceMinimum ] = useState('')
   const [ priceMaximum, setPriceMaximum ] = useState('')
+  const list = {
+    visible: {
+      opacity: 1,
+      transition: {
+        when: "beforeChildren",
+      }
+    },
+    hidden: {
+      opacity: 0,
+      transition: {
+        when: "afterChildren"
+      }
+    }
+  };
+
 
   const categoryChange = (e) => {
     if(e.target.id === 'adidas'){
@@ -176,6 +193,7 @@ const Home = ({ alertOnBottom }) => {
       </Head>
 
       <main className='box' ref={containerRef}>
+        <NavBar />
         <div className="py-20 px-60 mx-auto">
         <p className='text-center font-bold py-5 text-xl'> SHOP ALL SNEAKERS</p>
         <p className='text-center text-xs'>The vault goes deep at Shoelala. Shop for new releases from must-have names like Air Jordan, Nike, New Balance and Yeezy, along with the latest collaborations from brands like Vans, Reebok, Converse, ASICS, and more.</p>
@@ -183,13 +201,22 @@ const Home = ({ alertOnBottom }) => {
         <div className="flex pt-5 pb-20 w-full bg-slate-100">
         <Sidebar priceMaximum={priceMaximum} maximumChange={maximumChange} priceMinimum={priceMinimum} minimumChange={minimumChange} itemAmountChange={itemAmountChange} is20={is20} is40={is40} is100={is100} isNike={isNike} isJordan={isJordan} isAdidas={isAdidas} categoryChange={categoryChange}/>
         <div>
-        <p className='pb-5 font-semibold w-full justify-space-between flex'>Results</p>
-        <ul className='flex flex-wrap pb-10 pr-20 max-h-8/10'>
+        {/* <motion.ul animate='hidden' variants={list} className='flex flex-wrap pb-10 pr-20 max-h-8/10'>
           {shoes.map((shoe, index) => {
             return (<ListItem key={index} index={index} shoe={shoe}/>)
           })}
-        </ul>
+        </motion.ul> */}
+<motion.ul
+    className='flex flex-wrap pb-10 pr-20 max-h-8/10'
+    variants={list}
+    initial="hidden"
+    animate="visible"
+  >
 
+{shoes.map((shoe, index) => {
+            return (<ListItem key={index} index={index} shoe={shoe}/>)
+          })}
+  </motion.ul>
         </div>
         </div>
       </main>
