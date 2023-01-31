@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import CartItem from './CartItem'
 
 export default function Cart(props) {
@@ -36,8 +36,8 @@ export default function Cart(props) {
 
       {Object.entries(cartObj).length > 0 ? null : <p className='text-center'>Cart empty</p> }
 
-    <p className='absolute py-1 px-3  rounded-lg bg-slate-100 shadow-lg cursor-pointer'
-    style={{marginTop:-47.5, marginLeft:255}}
+    <p className='absolute py-1 px-3  rounded-lg bg-red-300 shadow-lg cursor-pointer'
+    style={{marginTop:-47.5, marginLeft:255, color:'white '}}
     onClick={() => {
       props.setIsOpen(false)
     }}>X</p>

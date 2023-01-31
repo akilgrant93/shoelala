@@ -14,6 +14,36 @@ const Shoe = () => {
     setSelectedSize(e.target.innerText)
   }
 
+  const addToCart = () => {
+    console.log('added')
+
+    console.log(firebase.auth().currentUser)
+    firebase.auth().signInAnonymously()
+  .then(() => {
+
+    const cartRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart')
+
+    const newUserCartItem = cartRef.doc()
+    const newUserCartItemID = newUserCartItem.id
+
+    const cartItemData = {
+      ...shoe, qty:1
+    }
+
+    newUserCartItem
+      .set(cartItemData)
+
+    console.log('signed in')
+    console.log(firebase.auth().currentUser)
+    // Signed in..
+  })
+  .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // ...
+  });
+  }
+
   useEffect(() => {
     let shoeRef = firebase.firestore().collection('shoes').where('title', '==', `${router.query.id}`)
 
@@ -57,7 +87,7 @@ const Shoe = () => {
       </div>
       <div className='flex justify-center flex-col'>
       <p className='pt-6 pb-3 text-sm font-semibold text-center'>ADD TO CART</p>
-      <p className='py-3 w-1/3 text-white px-5 bg-red-700 font-bold text-center self-center' >${shoe.price}</p>
+      <p onClick={addToCart} className='py-3 w-1/3 text-white px-5 bg-red-700 font-bold text-center self-center cursor-pointer' >${shoe.price}</p>
       </div>
       </div>
     </div>
