@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function CartItem(props) {
   return (
-    <div>
+    <div className={['border-b py-2']}>
       <div className='flex justify-between'>
       <img className='w-1/4 h-auto' src={props.item.image} alt={props.item.title}/>
       <p className='text-end text-xs pl-10'>{props.item.title}</p>
