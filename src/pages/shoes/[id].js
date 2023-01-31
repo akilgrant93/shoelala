@@ -52,7 +52,7 @@ const Shoe = () => {
       <p className='text-xl font-bold break-words my-5'>{shoe.title}</p>
       <p className='font-semibold break-words mb-5' style={{fontSize:14}}>SELECT SIZE</p>
       <div style={{display: 'grid', gap: '5px', gridTemplateColumns: 'repeat(5, 1fr)'}}> {[3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12,12.5,13,13.5,14,14.5,15].map((size, idx) => {
-        return <button onClick={handleChange} className='border border-slate-200 hover:border-black py-3' style={selectedSize === size.toString() ? {borderColor:'black'} : null}>{size}</button>
+        return <button key={idx} onClick={handleChange} className='border border-slate-200 hover:border-black py-3' style={selectedSize === size.toString() ? {borderColor:'black'} : null}>{size}</button>
       })}
       </div>
       <div className='flex justify-center flex-col'>
