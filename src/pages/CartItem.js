@@ -12,10 +12,10 @@ export default function CartItem(props) {
       className='bg-slate-100 w-12 rounded-sm ml-2 px-2 h-5 text-xs'
       type={'number'}
       min={0}
-      value={props.quantity}
+      value={props.item.qty}
       onChange={(e) => {props.changeQuantity(e, props.item)}}
       name='quantity'/>
-      <p className='text-end text-xs ml-2'>${props.quantity*props.item.price}</p>
+      <p className='text-end text-xs ml-2'>${props.item.qty*props.item.price}</p>
       </div>
     </div>
   )

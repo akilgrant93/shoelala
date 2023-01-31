@@ -2,14 +2,20 @@ import React, {useState} from 'react'
 import CartItem from './CartItem'
 
 export default function Cart(props) {
-  const [ cartItems, setCartItems ] = useState([{category:'Air Jordan',price:420,image:'https://cdn.flightclub.com/750/TEMPLATE/011834/1.jpg?w=360',title:'Air Jordan 11 retro "gamma blue"'}])
+  const [ cartObj, setCartObj ] = useState({'Air Jordan 11 retro "gamma blue"':{category:'Air Jordan',price:420,image:'https://cdn.flightclub.com/750/TEMPLATE/011834/1.jpg?w=360',title:'Air Jordan 11 retro "gamma blue"', qty:1},
+  'Air Jordan 11 retro "gamma red"':{category:'Air Jordan',price:420,image:'https://cdn.flightclub.com/750/TEMPLATE/011834/1.jpg?w=360',title:'Air Jordan 11 retro "gamma red"', qty:1}}
+  )
   const [ subtotal, setSubtotal ] = useState(0)
-  const [ quantity, setQuantity ] = useState(1)
 
   const changeQuantity = (e, data) => {
-    console.log(e)
-    console.log(data)
-    setQuantity(e.target.value)
+    console.log(e.target.value)
+    const cart = cartObj
+    if(e.target.value === '0'){
+      delete cart[data.title]
+    } else {
+      cart[data.title].qty = e.target.value
+    }
+    setCartObj(cart)
   }
 
   return (
@@ -17,9 +23,11 @@ export default function Cart(props) {
       <div className='p-10 bg-white w-80 h-3/5 rounded-xl flex flex-col justify-between shadow-lg'>
 
       <p className='text-sm font-bold pb-2' style={{borderBottomWidth: 1, borderBottomColor: 'black',}}>CART</p>
-      {cartItems.length > 0 ? cartItems.map((item, idx) => {
-        return <CartItem changeQuantity={changeQuantity} quantity={quantity} key={idx} item={item}/>
-      }) : <p className='text-center'>Cart empty</p> }
+      {Object.entries(cartObj).length > 0 ? Object.entries(cartObj).map((item, idx) => {
+        // console.log(Object.entries(cartObj).length)
+        return <CartItem changeQuantity={changeQuantity} key={idx} item={item[1]}/>
+      }
+      ) : <p className='text-center'>Cart empty</p> }
 
     <p className='absolute py-1 px-3  rounded-lg bg-slate-100 shadow-lg cursor-pointer'
     style={{marginTop:-47.5, marginLeft:255}}
