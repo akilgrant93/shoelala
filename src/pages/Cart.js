@@ -2,11 +2,29 @@ import React, {useState, useEffect} from 'react'
 import CartItem from './CartItem'
 import { firebase } from 'config'
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { motion } from "framer-motion"
 
 export default function Cart(props) {
   const [ cartObj, setCartObj ] = useState({}
   )
   const [ total, setTotal ] = useState(0)
+
+  const list = {
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        when: "beforeChildren",
+      }
+    },
+    hidden: {
+      opacity: 0,
+      y: 50,
+      transition: {
+        when: "afterChildren"
+      }
+    }
+  };
 
   const changeQuantity = (e, data) => {
     const shoeRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart').doc(data.title)
@@ -37,7 +55,6 @@ export default function Cart(props) {
           })
           setCartObj(cartObj)
           setTotal(subtotal)
-          // console.log('cart obj',cartObj)
         }
         )
 
@@ -45,13 +62,12 @@ export default function Cart(props) {
   }, [])
 
   return (
-    <div style={{zIndex:99, backgroundColor:'rgba(0,0,0,.5)', width: '100%', height: '100%', display:'flex', justifyContent:'center', alignItems:'center'}} className='fixed top-12'>
+    <motion.div variants={list} initial='hidden' animate='visible' style={{zIndex:99, backgroundColor:'rgba(0,0,0,.5)', width: '100%', height: '100%', display:'flex', justifyContent:'center', alignItems:'center'}} className='fixed top-12'>
       <div className='p-10 bg-white w-80 h-3/5 rounded-xl flex flex-col justify-between shadow-lg'>
 
       <div className='h-full overflow-y-scroll'>
       <p className='text-sm font-bold pb-2' style={{borderBottomWidth: 1, borderBottomColor: 'black',}}>CART</p>
       {Object.entries(cartObj).length > 0 ? Object.entries(cartObj).map((item, idx) => {
-        // console.log(item)
         return <CartItem changeQuantity={changeQuantity} key={idx} lastIdx={Object.entries(cartObj).length-1} item={item[1]}/>
       }
       ) : null }
@@ -74,7 +90,7 @@ export default function Cart(props) {
     </div>
 
       </div>
-    </div>
+    </motion.div>
 
   )
 }

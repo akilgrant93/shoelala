@@ -47,7 +47,6 @@ const Shoe = () => {
 
             newUserCartItem
             .set(cartItemData)
-            console.log('cart',cart)
           }
           )
 
@@ -109,7 +108,6 @@ const Shoe = () => {
           cartObj[item.id] = {...item.data()}
         })
         setCart(cartObj)
-        // console.log('cart obj',cartObj)
       }
       )
 
@@ -125,7 +123,7 @@ const Shoe = () => {
     <NavBar />
     <div style={{marginTop: 150, display:'flex'}}>
       <div className='w-1/2 p-10 text-sm'>
-        <div style={{display:'flex', justifyContent:'center'}}>
+        <div style={{display:'flex', justifyContent:'center'}} className='font-bold'>
           <p>Shoelala</p><p>/</p><p>{shoe.category}</p><p>/</p>
         </div>
         <p style={{textAlign:'center'}}>{shoe.title}</p>
@@ -141,7 +139,7 @@ const Shoe = () => {
       </div>
       <div className='flex justify-center flex-col'>
       <p className='pt-6 pb-3 text-sm font-semibold text-center'>ADD TO CART</p>
-      <p onClick={addToCart} className='py-3 w-1/3 text-white px-5 bg-red-700 font-bold text-center self-center cursor-pointer' >${shoe.price}</p>
+      <p onClick={addToCart} className='py-3 w-1/3 text-white px-5 bg-red-500 font-bold hover:bg-red-700 text-center self-center cursor-pointer' >${shoe.price}</p>
       </div>
       </div>
     </div>

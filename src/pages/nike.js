@@ -35,8 +35,6 @@ export default function Nike({ alertOnBottom }) {
   };
 
   const handleContainerOnBottom = useCallback(() => {
-    console.log('I am at bottom in optional container! ' + Math.round(performance.now()));
-
     if (alertOnBottom) {
       alert('Bottom of this container hit!');
     }
