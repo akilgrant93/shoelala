@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import CartItem from './CartItem'
 import { firebase } from 'config'
+import { AiOutlineShoppingCart } from "react-icons/ai";
 
 export default function Cart(props) {
   const [ cartObj, setCartObj ] = useState({}
@@ -8,12 +9,15 @@ export default function Cart(props) {
   const [ total, setTotal ] = useState(0)
 
   const changeQuantity = (e, data) => {
-    console.log(e.target.value)
-    const cart = cartObj
+    const shoeRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart').doc(data.title)
+
+    let cart = cartObj
     if(e.target.value === '0'){
       delete cart[data.title]
+      shoeRef.delete()
     } else {
       cart[data.title].qty = e.target.value
+      shoeRef.update({qty: e.target.value})
     }
     setCartObj(cart)
   }
@@ -51,9 +55,9 @@ export default function Cart(props) {
         return <CartItem changeQuantity={changeQuantity} key={idx} lastIdx={Object.entries(cartObj).length-1} item={item[1]}/>
       }
       ) : null }
+      {Object.entries(cartObj).length > 0 ? null : <div className='h-full flex flex-col justify-center items-center'><AiOutlineShoppingCart size={45}/><p className='text-center text-xs mt-2'>Your cart is empty</p></div> }
       </div>
 
-      {Object.entries(cartObj).length > 0 ? null : <p className='text-center'>Cart empty</p> }
 
     <p className='absolute py-1 px-3  rounded-lg bg-red-300 shadow-lg cursor-pointer'
     style={{marginTop:-47.5, marginLeft:255, color:'white '}}
