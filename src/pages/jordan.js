@@ -98,7 +98,7 @@ export default function Jordan({ alertOnBottom }) {
   return (
     <div>
       <Head>
-        <title>All Products</title>
+        <title>Jordans</title>
         <meta name="description" content="All Products" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

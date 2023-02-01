@@ -185,7 +185,7 @@ const Home = ({ alertOnBottom }) => {
   return (
     <div>
       <Head>
-        <title>All Products</title>
+        <title>Shoelala</title>
         <meta name="description" content="All Products" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

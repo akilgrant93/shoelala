@@ -99,7 +99,7 @@ export default function Nike({ alertOnBottom }) {
   return (
     <div>
       <Head>
-        <title>All Products</title>
+        <title>Nikes</title>
         <meta name="description" content="All Products" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
