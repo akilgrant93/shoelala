@@ -2,7 +2,7 @@ import { firebase } from 'config'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import {useState, useEffect} from 'react'
-import NavBar from '../NavBar'
+import NavBar from '../../NavBar'
 
 
 const Shoe = () => {

@@ -3,7 +3,7 @@ import CartItem from './CartItem'
 import { firebase } from 'config'
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { motion } from "framer-motion"
-import Link from 'next/link'
+// import Link from 'next/link'
 
 export default function Cart(props) {
   const [ cartObj, setCartObj ] = useState({}

@@ -1,9 +1,9 @@
 import { firebase } from "config"
 import Head from "next/head"
 import React, {useState, useEffect, useCallback} from 'react'
-import ListItem from "./ListItem"
-import Sidebar from "./Sidebar"
-import NavBar from "./NavBar"
+import ListItem from "../ListItem"
+import Sidebar from "../Sidebar"
+import NavBar from "../NavBar"
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import { motion } from "framer-motion"
 
