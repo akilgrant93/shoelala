@@ -67,7 +67,6 @@ const Shoe = () => {
         //if there is a shoe in the cart update it
         //this function will need to be tweaked to accomodate adding multiple copies of the same shoe, but of different sizes to the cart
         shoeRef.forEach(shoe => {
-          console.log(shoe.data())
                 const docRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart').doc(shoe.id)
                 docRef.update({qty: shoe.data().qty+1});
         })

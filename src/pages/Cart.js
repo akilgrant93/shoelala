@@ -7,7 +7,6 @@ export default function Cart(props) {
   )
   const [ total, setTotal ] = useState(0)
 
-  //needs to trigger updates just like id.js
   const changeQuantity = (e, data) => {
     console.log(e.target.value)
     const cart = cartObj
@@ -30,7 +29,7 @@ export default function Cart(props) {
           let subtotal = 0
           querySnapshot.forEach((item) => {
             cartObj[item.id] = {...item.data()}
-            subtotal = subtotal+item.data().price
+            subtotal = subtotal + item.data().price * item.data().qty
           })
           setCartObj(cartObj)
           setTotal(subtotal)
@@ -48,7 +47,7 @@ export default function Cart(props) {
       <div className='h-full overflow-y-scroll'>
       <p className='text-sm font-bold pb-2' style={{borderBottomWidth: 1, borderBottomColor: 'black',}}>CART</p>
       {Object.entries(cartObj).length > 0 ? Object.entries(cartObj).map((item, idx) => {
-        // console.log(Object.entries(cartObj).length)
+        // console.log(item)
         return <CartItem changeQuantity={changeQuantity} key={idx} lastIdx={Object.entries(cartObj).length-1} item={item[1]}/>
       }
       ) : null }
