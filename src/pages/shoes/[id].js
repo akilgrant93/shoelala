@@ -7,41 +7,81 @@ import NavBar from '../NavBar'
 
 const Shoe = () => {
   const [ shoe, setShoe ] = useState([])
-  const [ selectedSize, setSelectedSize] = useState(null)
+  const [ cart, setCart ] = useState([])
+  const [ selectedSize, setSelectedSize ] = useState(null)
   const router = useRouter()
 
   const handleChange = (e) => {
     setSelectedSize(e.target.innerText)
   }
 
-  const addToCart = () => {
-    console.log('added')
+  const addToCart = async () => {
+    if(selectedSize === null){
+      alert('Select a size!')
+    }else {
+      //if there is no user create a user
+      if(!firebase.auth().currentUser){
+      firebase.auth().signInAnonymously()
+      .then(() => {
 
-    console.log(firebase.auth().currentUser)
-    firebase.auth().signInAnonymously()
-  .then(() => {
+        const cartRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart')
 
-    const cartRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart')
+        const shoeRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart').where('title', '==', `${shoe.title}`)
 
-    const newUserCartItem = cartRef.doc()
-    const newUserCartItemID = newUserCartItem.id
+        const newUserCartItem = cartRef.doc()
 
-    const cartItemData = {
-      ...shoe, qty:1
+        const currShoe = []
+        shoeRef
+          .limit(1)
+          .onSnapshot(
+            querySnapshot => {
+              let cartItemData
+              querySnapshot.forEach((shoe) => {
+                currShoe.push({...shoe.data(), id: shoe.id})
+              })
+
+
+              cartItemData = {
+                ...shoe, qty:1, size:selectedSize, id:newUserCartItem.id
+              }
+
+            newUserCartItem
+            .set(cartItemData)
+            console.log('cart',cart)
+          }
+          )
+
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ...
+      });
+      }
+      //if there is a user
+      else {
+        const cartRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart')
+
+        const shoeRef = await firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart').where('title', '==', `${shoe.title}`).get()
+
+        //if there is a shoe in the cart update it
+        //this function will need to be tweaked to accomodate adding multiple copies of the same shoe, but of different sizes to the cart
+        shoeRef.forEach(shoe => {
+          console.log(shoe.data())
+                const docRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart').doc(shoe.id)
+                docRef.update({qty: shoe.data().qty+1});
+        })
+
+        if(shoeRef.empty){
+          const newUserCartItem = cartRef.doc()
+          const cartItemData = {
+            ...shoe, qty:1, size:selectedSize, id:newUserCartItem.id
+          }
+          newUserCartItem
+            .set(cartItemData)
+        }
+      }
     }
-
-    newUserCartItem
-      .set(cartItemData)
-
-    console.log('signed in')
-    console.log(firebase.auth().currentUser)
-    // Signed in..
-  })
-  .catch((error) => {
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    // ...
-  });
   }
 
   useEffect(() => {
@@ -59,8 +99,23 @@ const Shoe = () => {
       }
     )
 
+   if(firebase.auth().currentUser){
+    const cartRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart')
 
-  }, [])
+    cartRef
+    .onSnapshot(
+      querySnapshot => {
+        const cartObj = {}
+        querySnapshot.forEach((item) => {
+          cartObj[item.id] = {...item.data()}
+        })
+        setCart(cartObj)
+        // console.log('cart obj',cartObj)
+      }
+      )
+
+    }
+  }, [router.query.id, cart])
 
   return <div>
     <Head>
