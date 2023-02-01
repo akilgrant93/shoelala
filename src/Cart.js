@@ -64,7 +64,7 @@ export default function Cart(props) {
 
   return (
     <motion.div variants={list} initial='hidden' animate='visible' style={{zIndex:99, backgroundColor:'rgba(0,0,0,.5)', width: '100%', height: '100%', display:'flex', justifyContent:'center', alignItems:'center', position:'fixed', top: '3rem'}}>
-      <div style={{padding:'2.5rem', backgroundColor:'white', display:'flex', flexDirection:'column', justifyContent:'space-between', borderRadius: 10, width:'20rem', height:'60%', boxShadow: '0px 0px 9px rgba(0,0,0,.5)'}} >
+      <div style={{padding:'2.5rem', backgroundColor:'white', display:'flex', flexDirection:'column', justifyContent:'space-between', borderRadius: 10, width:'20rem', height:'60%'}} className='shadow-lg'>
 
       <div style={{height:'100%', overflowY:'scroll'}}>
       <p style={{fontWeight: 'bold',fontSize: 10,paddingBottom: '.5rem', borderBottomWidth: 1, borderBottomColor: 'black',}}>CART</p>
@@ -76,7 +76,7 @@ export default function Cart(props) {
       </div>
 
 
-    <p style={{position: 'absolute', paddingLeft: '.75rem', paddingRight: '.75rem', paddingBottom: '.25rem', paddingTop: '.25rem', marginTop:-47.5, marginLeft:252.5, color:'white', backgroundColor:'rgb(252 165 165)', borderRadius:5, boxShadow: '0px 0px 5px rgba(0,0,0,.5)'}} className='bg-red-300 cursor-pointer'
+    <p style={{position: 'absolute', paddingLeft: '.75rem', paddingRight: '.75rem', paddingBottom: '.25rem', paddingTop: '.25rem', marginTop:-47.5, marginLeft:252.5, color:'white', backgroundColor:'rgb(252 165 165)', borderRadius:5}} className='bg-red-300 cursor-pointer shadow-lg'
     onClick={() => {
       props.setIsOpen(false)
     }}>X</p>

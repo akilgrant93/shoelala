@@ -8,7 +8,7 @@ export default function NavBar() {
 
   return (
     <div>
-    <ul className='shadow-md' style={{position: 'fixed', top: 0, width: '100%', zIndex: 999, display:'flex', justifyContent:'space-between' ,backgroundColor:'white', alignItems:'center', paddingRight: 40, boxShadow: '0px 0px 9px #000',}}>
+    <ul className='shadow-md' style={{position: 'fixed', top: 0, width: '100%', zIndex: 999, display:'flex', justifyContent:'space-between' ,backgroundColor:'white', alignItems:'center', paddingRight: 40, boxShadow: '0px 2px 5px rgba(0,0,0,.5)'}}>
       <li style={{padding:5, marginLeft: 40}}><Link href="/"><img style={{height: 35}} src={'/shoelala.png'} alt={'Shoelala logo'}/></Link></li>
       <div style={{display:'flex'}}>
       <li style={{padding:5, fontSize:12}}><Link href="/">ALL</Link></li>
