@@ -1,15 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import CartItem from './CartItem'
+import { firebase } from 'config'
 
 export default function Cart(props) {
-  const [ cartObj, setCartObj ] = useState({'Air Jordan 11 retro "gamma blue"':{category:'Air Jordan',price:420,image:'https://cdn.flightclub.com/750/TEMPLATE/011834/1.jpg?w=360',title:'Air Jordan 11 retro "gamma blue"', qty:1},
-  'Air Jordan 11 retro "gamma red"':{category:'Air Jordan',price:420,image:'https://cdn.flightclub.com/750/TEMPLATE/011834/1.jpg?w=360',title:'Air Jordan 11 retro "gamma red"', qty:1},
-  'Air Jordan 11 retro "gamma green"':{category:'Air Jordan',price:420,image:'https://cdn.flightclub.com/750/TEMPLATE/011834/1.jpg?w=360',title:'Air Jordan 11 retro "gamma red"', qty:1},
-  'Air Jordan 11 retro "gamma pink"':{category:'Air Jordan',price:420,image:'https://cdn.flightclub.com/750/TEMPLATE/011834/1.jpg?w=360',title:'Air Jordan 11 retro "gamma red"', qty:1},
-  'Air Jordan 11 retro "gamma raw"':{category:'Air Jordan',price:420,image:'https://cdn.flightclub.com/750/TEMPLATE/011834/1.jpg?w=360',title:'Air Jordan 11 retro "gamma red"', qty:1}}
+  const [ cartObj, setCartObj ] = useState({}
   )
-  const [ subtotal, setSubtotal ] = useState(0)
+  const [ total, setTotal ] = useState(0)
 
+  //needs to trigger updates just like id.js
   const changeQuantity = (e, data) => {
     console.log(e.target.value)
     const cart = cartObj
@@ -20,6 +18,28 @@ export default function Cart(props) {
     }
     setCartObj(cart)
   }
+
+  useEffect(() => {
+    if(firebase.auth().currentUser){
+      const cartRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart')
+
+      cartRef
+      .onSnapshot(
+        querySnapshot => {
+          const cartObj = {}
+          let subtotal = 0
+          querySnapshot.forEach((item) => {
+            cartObj[item.id] = {...item.data()}
+            subtotal = subtotal+item.data().price
+          })
+          setCartObj(cartObj)
+          setTotal(subtotal)
+          // console.log('cart obj',cartObj)
+        }
+        )
+
+      }
+  }, [])
 
   return (
     <div style={{zIndex:99, backgroundColor:'rgba(0,0,0,.5)', width: '100%', height: '100%', display:'flex', justifyContent:'center', alignItems:'center'}} className='fixed top-12'>
@@ -45,7 +65,7 @@ export default function Cart(props) {
     <div>
       <div style={{borderTopWidth: 1, borderTopColor: 'black',}} className='flex justify-between'>
     <p className='text-sm font-bold py-2'>SUBTOTAL</p>
-    <p className='text-sm font-bold py-2'>${subtotal}</p>
+    <p className='text-sm font-bold py-2'>${total}</p>
       </div>
     <p style={{fontSize:10, textAlign:'end'}}>Tax included. Shipping calculated at checkout</p>
     </div>

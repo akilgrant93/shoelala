@@ -28,7 +28,7 @@ const Shoe = () => {
 
         const shoeRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart').where('title', '==', `${shoe.title}`)
 
-        const newUserCartItem = cartRef.doc()
+        const newUserCartItem = cartRef.doc(shoe.title)
 
         const currShoe = []
         shoeRef
@@ -73,7 +73,7 @@ const Shoe = () => {
         })
 
         if(shoeRef.empty){
-          const newUserCartItem = cartRef.doc()
+          const newUserCartItem = cartRef.doc(shoe.title)
           const cartItemData = {
             ...shoe, qty:1, size:selectedSize, id:newUserCartItem.id
           }
