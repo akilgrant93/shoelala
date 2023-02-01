@@ -3,6 +3,7 @@ import CartItem from './CartItem'
 import { firebase } from 'config'
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { motion } from "framer-motion"
+import Link from 'next/link'
 
 export default function Cart(props) {
   const [ cartObj, setCartObj ] = useState({}
@@ -86,7 +87,10 @@ export default function Cart(props) {
     <p className='text-sm font-bold py-2'>SUBTOTAL</p>
     <p className='text-sm font-bold py-2'>${total}</p>
       </div>
-    <p style={{fontSize:10, textAlign:'end'}}>Tax included. Shipping calculated at checkout</p>
+    <p style={{fontSize:10, textAlign:'center'}}>Taxes and shipping calculated at checkout</p>
+    {/* <Link href="/checkout"> */}
+      <p className='py-3 text-white px-5 bg-red-500 font-bold hover:bg-red-700 text-center self-center cursor-pointer mt-2 rounded-md'>CHECKOUT</p>
+      {/* </Link> */}
     </div>
 
       </div>
