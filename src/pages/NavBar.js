@@ -16,7 +16,7 @@ export default function NavBar() {
       <li className='font-semibold' style={{padding:5, fontSize:12}}><Link href="/adidas"><SiAdidas className='mx-1' size={18}/></Link></li>
       <li className='font-semibold' style={{padding:5, fontSize:12}}><Link href="/nike"><SiNike className='mx-1' size={18}/></Link></li>
       <li className='font-semibold cursor-pointer' onClick={() => {setIsOpen(true)}} style={{padding:5}}><AiOutlineShoppingCart className='mx-1' size={18}/></li>
-      <li className='font-semibold' style={{padding:5, fontSize:12}}><Link href="/account">ACCOUNT</Link></li>
+      {/* <li className='font-semibold' style={{padding:5, fontSize:12}}><Link href="/">ACCOUNT</Link></li> */}
       </div>
     </ul>
       {isOpen && <Cart setIsOpen={setIsOpen} />}
