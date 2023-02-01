@@ -63,29 +63,28 @@ export default function Cart(props) {
   }, [])
 
   return (
-    <motion.div variants={list} initial='hidden' animate='visible' style={{zIndex:99, backgroundColor:'rgba(0,0,0,.5)', width: '100%', height: '100%', display:'flex', justifyContent:'center', alignItems:'center'}} className='fixed top-12'>
-      <div className='p-10 bg-white w-80 h-3/5 rounded-xl flex flex-col justify-between shadow-lg'>
+    <motion.div variants={list} initial='hidden' animate='visible' style={{zIndex:99, backgroundColor:'rgba(0,0,0,.5)', width: '100%', height: '100%', display:'flex', justifyContent:'center', alignItems:'center', position:'fixed', top: '3rem'}}>
+      <div style={{padding:'2.5rem', backgroundColor:'white', display:'flex', flexDirection:'column', justifyContent:'space-between', borderRadius: 10, width:'20rem', height:'60%', boxShadow: '0px 0px 9px rgba(0,0,0,.5)'}} >
 
-      <div className='h-full overflow-y-scroll'>
-      <p className='text-sm font-bold pb-2' style={{borderBottomWidth: 1, borderBottomColor: 'black',}}>CART</p>
+      <div style={{height:'100%', overflowY:'scroll'}}>
+      <p style={{fontWeight: 'bold',fontSize: 10,paddingBottom: '.5rem', borderBottomWidth: 1, borderBottomColor: 'black',}}>CART</p>
       {Object.entries(cartObj).length > 0 ? Object.entries(cartObj).map((item, idx) => {
         return <CartItem changeQuantity={changeQuantity} key={idx} lastIdx={Object.entries(cartObj).length-1} item={item[1]}/>
       }
       ) : null }
-      {Object.entries(cartObj).length > 0 ? null : <div className='h-full flex flex-col justify-center items-center'><AiOutlineShoppingCart size={45}/><p className='text-center text-xs mt-2'>Your cart is empty</p></div> }
+      {Object.entries(cartObj).length > 0 ? null : <div style={{height:'100%', display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}}><AiOutlineShoppingCart size={45}/><p style={{textAlign:'center', fontSize:10, marginTop: '.5rem'}}>Your cart is empty</p></div> }
       </div>
 
 
-    <p className='absolute py-1 px-3  rounded-lg bg-red-300 shadow-lg cursor-pointer'
-    style={{marginTop:-47.5, marginLeft:255, color:'white '}}
+    <p style={{position: 'absolute', paddingLeft: '.75rem', paddingRight: '.75rem', paddingBottom: '.25rem', paddingTop: '.25rem', marginTop:-47.5, marginLeft:252.5, color:'white', backgroundColor:'rgb(252 165 165)', borderRadius:5, boxShadow: '0px 0px 5px rgba(0,0,0,.5)'}} className='bg-red-300 cursor-pointer'
     onClick={() => {
       props.setIsOpen(false)
     }}>X</p>
 
     <div>
-      <div style={{borderTopWidth: 1, borderTopColor: 'black',}} className='flex justify-between'>
-    <p className='text-sm font-bold py-2'>SUBTOTAL</p>
-    <p className='text-sm font-bold py-2'>${total}</p>
+      <div style={{borderTopWidth: 1, borderTopColor: 'black', display:'flex', justifyContent:'space-between'}}>
+    <p style={{paddingTop: '.5rem', paddingBlock: '.5rem'}} className='text-sm font-bold'>SUBTOTAL</p>
+    <p style={{paddingTop: '.5rem', paddingBlock: '.5rem'}} className='text-sm font-bolds'>${total}</p>
       </div>
     <p style={{fontSize:10, textAlign:'center'}}>Taxes and shipping calculated at checkout</p>
     {/* <Link href="/checkout"> */}
