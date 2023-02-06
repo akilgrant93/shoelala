@@ -8,28 +8,31 @@ const item = {
   hidden: { opacity: 0, y: 50 }
 };
 
-const listItemStyle01 = {
-  width: '25%',
-  marginRight: '1.25rem',
-  paddingTop: '1.25rem',
-  paddingBottom: '1.25rem'
-}
-
-const listItemStyle02 = {
-  width: '20%',
-  marginRight: '1.25rem',
-  paddingTop: '1.25rem',
-  paddingBottom: '1.25rem'
-}
 
 function ListItem(props) {
+
+  const listItemStyle01 = {
+    width: '25%',
+    marginRight: props.index % 3 === 2 ? 0 : '1.25rem',
+    paddingTop: '1.25rem',
+    paddingBottom: '1.25rem'
+  }
+
+  const listItemStyle02 = {
+    width: '20%',
+    marginRight: '1.25rem',
+    paddingTop: '1.25rem',
+    paddingBottom: '1.25rem'
+  }
+
   return (
     <motion.li variants={item} style={props.windowDimensions.width < 1024 ? listItemStyle01 : listItemStyle02} className={`bg-white w-1/4 ${
       props.windowDimensions.width < 1024 && props.index > 2
       ? 'mt-5'
       : props.windowDimensions.width > 1024 && props.index > 3
       ? 'mt-5'
-      : null} rounded-md shadow-lg`}>
+      : null}
+      rounded-md shadow-lg`}>
       <Link href={`/shoes/${encodeURIComponent(props.shoe.title)}`}>
       <img src={props.shoe.image} alt={props.shoe.title}/>
       <div style={{paddingLeft: '1.25rem', paddingRight: '1.25rem', marginTop: '.75rem'}} className='text-slate-400 text-xs'>{props.shoe.category}</div>
