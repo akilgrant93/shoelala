@@ -82,7 +82,6 @@ export default function Nike({ alertOnBottom }) {
 
 
     }, [])
-    console.log(windowDimensions)
     const getNextShoes = () => {
       let shoesRef = firebase.firestore().collection('shoes').where('category', '==', 'Air Nike')
       .orderBy('title')

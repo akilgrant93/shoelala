@@ -82,7 +82,6 @@ export default function Adidas({ alertOnBottom }) {
 
 
     }, [])
-    console.log(windowDimensions)
     const getNextShoes = () => {
       let shoesRef = firebase.firestore().collection('shoes').where('category', '==', 'Air Adidas')
       .orderBy('title')
@@ -112,7 +111,7 @@ export default function Adidas({ alertOnBottom }) {
   return (
     <div className="w-fit">
       <Head>
-        <title>Adidass</title>
+        <title>Adidas</title>
         <meta name="description" content="All Products" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

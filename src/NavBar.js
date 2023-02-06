@@ -15,14 +15,15 @@ export default function NavBar(props) {
 
   const tabStyle01 = {
     display: 'flex',
-    flexDirection:'column'
+    marginTop: 5,
+    paddingBottom: 10
   };
   const tabStyle02 = {
     display: 'flex',
     flexDirection:'row'
   };
 
-  const buttonStyle01 = {padding:5, fontSize:12}
+  const buttonStyle01 = {padding:5, marginLeft: 10, marginRight:10, fontSize:12}
   const buttonStyle02 = {padding:10, fontSize:12}
 
   return (
