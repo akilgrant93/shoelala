@@ -9,6 +9,7 @@ import { motion } from "framer-motion"
 
 const Home = ({ alertOnBottom }) => {
   const [shoes, setShoes] = useState([])
+  const [windowDimensions, setWindowDimensions] = useState(1);
   const [ selectedBrand, setSelectedBrand ] = useState(false)
   const [ firstEntry, setFirstEntry ] = useState('')
   const [ firstVisibleDoc, setFirstVisibleDoc ] = useState("");
@@ -111,6 +112,7 @@ const Home = ({ alertOnBottom }) => {
     const containerRef = useBottomScrollListener(handleContainerOnBottom);
 
   useEffect(() => {
+
     let shoesRef
 
     const handleScroll = event => {
@@ -145,11 +147,16 @@ const Home = ({ alertOnBottom }) => {
       }
     )
 
+    function handleResize() {
+      setWindowDimensions({width:window.innerWidth, height:window.innerHeight});
+    }
+
+    handleResize()
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
     };
-
-
     }, [selectedBrand, limit, priceMaximum, priceMinimum])
 
     const getNextShoes = () => {
@@ -182,6 +189,15 @@ const Home = ({ alertOnBottom }) => {
       )
     }
 
+    const synposisStyle01 = {
+      backgroundColor:'rgba(255,255,255,.75)', width: '300%', marginLeft: '-100%'
+    };
+    const synposisStyle02 = {
+      backgroundColor:'rgba(255,255,255,.75)'
+    };
+
+    // console.log(windowDimensions)
+
   return (
     <div className="w-fit">
       <Head>
@@ -191,28 +207,24 @@ const Home = ({ alertOnBottom }) => {
       </Head>
 
       <main className='box' ref={containerRef}>
-        <NavBar />
+        <NavBar windowDimensions={windowDimensions}/>
         <div className="py-20 px-60 mx-auto"
         style={{
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',backgroundImage: "url(/pexels-erik-mclean-7543637.jpg)" }}>
-        <div style={{backgroundColor:'rgba(255,255,255,.75)'}} className='rounded-md shadow-lg p-5 mt-16'>
+        <div style={windowDimensions.width < 1024 ? synposisStyle01 : synposisStyle02} className='rounded-md shadow-lg p-5 lg:my-16'>
         <p className='text-center font-bold pb-5 text-xl'> SHOP ALL SNEAKERS</p>
         <p className='text-center text-xs'>The vault goes deep at Shoelala. Shop for new releases from must-have names like Nike, Nike, New Balance and Yeezy, along with the latest collaborations from brands like Vans, Reebok, Converse, ASICS, and more.</p>
         </div>
         </div>
 
-        <div className="flex pt-5 pb-20 w-full bg-slate-100">
-        <Sidebar priceMaximum={priceMaximum} maximumChange={maximumChange} priceMinimum={priceMinimum} minimumChange={minimumChange} itemAmountChange={itemAmountChange} is20={is20} is40={is40} is100={is100} isNike={isNike} isJordan={isJordan} isAdidas={isAdidas} categoryChange={categoryChange}/>
+        <div style={{boxShadow: '0px -2px 5px rgba(0,0,0,.5)'}} className="flex flex-col lg:flex-row pt-5 pb-20 w-full bg-slate-100">
+        <Sidebar windowDimensions={windowDimensions} priceMaximum={priceMaximum} maximumChange={maximumChange} priceMinimum={priceMinimum} minimumChange={minimumChange} itemAmountChange={itemAmountChange} is20={is20} is40={is40} is100={is100} isNike={isNike} isJordan={isJordan} isAdidas={isAdidas} categoryChange={categoryChange}/>
         <div>
-        {/* <motion.ul animate='hidden' variants={list} className='flex flex-wrap pb-10 pr-20 max-h-8/10'>
-          {shoes.map((shoe, index) => {
-            return (<ListItem key={index} index={index} shoe={shoe}/>)
-          })}
-        </motion.ul> */}
 <motion.ul
-    className='flex flex-wrap pb-10 pr-20 max-h-8/10'
+    style={windowDimensions.width < 1024 ? {justifyContent:'center'} : null}
+    className='flex flex-wrap pb-10 lg:pr-20 max-h-8/10'
     variants={list}
     initial="hidden"
     animate="visible"

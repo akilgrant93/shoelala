@@ -1,14 +1,30 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 
 export default function Sidebar(props) {
+  const listStyle01 = {
+    flexDirection: 'row'
+  };
+  const listStyle02 = {
+    flexDirection: 'column'
+  };
 
+  const listItemStyle01 = {
+    marginRight: 10
+  };
+
+  const listItemStyle02 = {
+    marginTop: 10
+  };
+
+  console.log(props.windowDimensions.width)
   return (
     props.type
     ? <div className='w-96'></div>
-    : <div className='px-5'>
+    : <div className='px-5 flex flex-col pb-10'>
       <p className='pb-5 font-semibold'>Filter</p>
 
-      <ul className='pb-5 rounded-lg bg-white shadow-lg'>
+      <div style={props.windowDimensions.width < 1024 ? listStyle01 : listStyle02}  className='flex self-center'>
+      <ul style={props.windowDimensions.width < 1024 ? listItemStyle01 : null} className='pb-5 rounded-lg bg-white shadow-lg'>
         <li className='font-semibold border-b border-slate-200 px-5 py-3 mb-2'>BRAND</li>
         <li className='px-5 py-1 text-xs flex content-center'>
           <input
@@ -39,29 +55,7 @@ export default function Sidebar(props) {
         <label className='pl-2' htmlFor="adidas">Adidas</label></li>
       </ul>
 
-      <div className='mt-5 pb-5 rounded-lg bg-white shadow-lg'>
-        <p className='font-semibold border-b border-slate-200 px-5 py-3 mb-2'>PRICE</p>
-        <form className='flex flex-col'>
-        <p className='text-xs mx-5'>FROM</p>
-        <input
-        className='bg-slate-100 mx-5 p-2 text-xs'
-        type="number"
-        min={0}
-        value={props.priceMinimum}
-        onChange={props.minimumChange}
-        name="minimum" />
-        <p className='text-xs mx-5 mt-2'>TO</p>
-        <input
-        className='bg-slate-100 mx-5 p-2 text-xs'
-        type="number"
-        min={0}
-        value={props.priceMaximum}
-        onChange={props.maximumChange}
-        name="maximum" />
-        </form>
-      </div>
-
-      <ul className='pb-5 rounded-lg bg-white shadow-lg mt-5'>
+      <ul style={props.windowDimensions.width < 1024 ? listItemStyle01 : listItemStyle02} className='pb-5 rounded-lg bg-white shadow-lg lg:mt-5'>
         <li className='font-semibold border-b border-slate-200 px-5 py-3 mb-2'>ITEMS</li>
         <li className='px-5 py-1 text-xs flex content-center'>
           <input
@@ -92,6 +86,32 @@ export default function Sidebar(props) {
         <label className='pl-2' htmlFor="100">100</label>
         </li>
       </ul>
+
+      <div style={props.windowDimensions.width < 1024 ? null : listItemStyle02} className='lg:mt-5 pb-5 rounded-lg bg-white shadow-lg'>
+        <p className='font-semibold border-b border-slate-200 px-5 py-3 mb-2'>PRICE</p>
+        <form className='flex flex-col'>
+        <p className='text-xs mx-5'>FROM</p>
+        <input
+        className='bg-slate-100 mx-5 p-2 text-xs'
+        type="number"
+        min={0}
+        value={props.priceMinimum}
+        onChange={props.minimumChange}
+        name="minimum" />
+        <p className='text-xs mx-5 mt-2'>TO</p>
+        <input
+        className='bg-slate-100 mx-5 p-2 text-xs'
+        type="number"
+        min={0}
+        value={props.priceMaximum}
+        onChange={props.maximumChange}
+        name="maximum" />
+        </form>
+      </div>
+      </div>
+
+
+
       </div>
   )
 }
