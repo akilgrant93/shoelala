@@ -183,7 +183,7 @@ const Home = ({ alertOnBottom }) => {
     }
 
   return (
-    <div>
+    <div className="w-fit">
       <Head>
         <title>Shoelala</title>
         <meta name="description" content="All Products" />
