@@ -2,13 +2,13 @@ import { firebase } from "config"
 import Head from "next/head"
 import React, {useState, useEffect, useCallback} from 'react'
 import ListItem from "../ListItem"
-import Sidebar from "../Sidebar"
 import NavBar from "../NavBar"
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import { motion } from "framer-motion"
 
 export default function Jordan({ alertOnBottom }) {
   const [shoes, setShoes] = useState([])
+  const [windowDimensions, setWindowDimensions] = useState(1);
   const [ lastVisibleDoc, setLastVisibleDoc ] = useState("");
   const [scrollTop, setScrollTop] = useState(0);
 
@@ -69,13 +69,20 @@ export default function Jordan({ alertOnBottom }) {
       }
     )
 
+    function handleResize() {
+      setWindowDimensions({width:window.innerWidth, height:window.innerHeight});
+    }
+
+    handleResize()
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
     };
 
 
-    })
-
+    }, [])
+    console.log(windowDimensions)
     const getNextShoes = () => {
       let shoesRef = firebase.firestore().collection('shoes').where('category', '==', 'Air Jordan')
       .orderBy('title')
@@ -95,8 +102,15 @@ export default function Jordan({ alertOnBottom }) {
       )
     }
 
+    const synposisStyle01 = {
+      backgroundColor:'rgba(255,255,255,.75)', width: '300%', marginLeft: '-100%'
+    };
+    const synposisStyle02 = {
+      backgroundColor:'rgba(255,255,255,.75)'
+    };
+
   return (
-    <div>
+    <div className="w-fit">
       <Head>
         <title>Jordans</title>
         <meta name="description" content="All Products" />
@@ -104,21 +118,20 @@ export default function Jordan({ alertOnBottom }) {
       </Head>
 
       <main className='box' ref={containerRef}>
-        <NavBar />
+      <NavBar windowDimensions={windowDimensions}/>
         <div className="py-20 px-60 mx-auto"
         style={{
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',backgroundImage: "url(/pexels-terrance-barksdale-10112911.jpg)" }}>
-        <div style={{backgroundColor:'rgba(255,255,255,.75)'}} className='rounded-md shadow-lg p-5 mt-16'>
+        <div style={windowDimensions.width < 1024 ? synposisStyle01 : synposisStyle02}  className='rounded-md shadow-lg p-5 mt-16'>
         <p className='text-center font-bold pb-5 text-xl'> SHOP JORDANS</p>
         <p className='text-center text-xs'>The vault goes deep at Shoelala. Shop for new releases from must-have names like Nike, Nike, New Balance and Yeezy, along with the latest collaborations from brands like Vans, Reebok, Converse, ASICS, and more.</p>
         </div>
         </div>
         <div className="flex pt-5 pb-20 w-full bg-slate-100">
-        <Sidebar type={'category'}/>
-        <div className='ml-20'>
 <motion.ul
+    style={windowDimensions.width < 1024 ? {justifyContent:'center'} : null}
     className='flex flex-wrap pb-10 max-h-8/10'
     variants={list}
     initial="hidden"
@@ -126,10 +139,9 @@ export default function Jordan({ alertOnBottom }) {
   >
 
 {shoes.map((shoe, index) => {
-            return (<ListItem key={index} index={index} shoe={shoe}/>)
+            return (<ListItem windowDimensions={windowDimensions} key={index} index={index} shoe={shoe}/>)
           })}
   </motion.ul>
-        </div>
         </div>
       </main>
     </div>

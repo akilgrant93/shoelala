@@ -2,7 +2,6 @@ import { firebase } from "config"
 import Head from "next/head"
 import React, {useState, useEffect, useCallback} from 'react'
 import ListItem from "../ListItem"
-import Sidebar from "../Sidebar"
 import NavBar from "../NavBar"
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import { motion } from "framer-motion"
@@ -117,7 +116,6 @@ export default function Adidas({ alertOnBottom }) {
         </div>
 
         <div className="flex pt-5 pb-20 w-full bg-slate-100">
-        <Sidebar type={'category'}/>
         <div className='ml-20'>
 <motion.ul
     className='flex flex-wrap pb-10 max-h-8/10'

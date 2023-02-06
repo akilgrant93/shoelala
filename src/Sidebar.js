@@ -16,11 +16,8 @@ export default function Sidebar(props) {
     marginTop: 10
   };
 
-  console.log(props.windowDimensions.width)
   return (
-    props.type
-    ? <div className='w-96'></div>
-    : <div className='px-5 flex flex-col pb-10'>
+    <div className='px-5 flex flex-col pb-10'>
       <p className='pb-5 font-semibold'>Filter</p>
 
       <div style={props.windowDimensions.width < 1024 ? listStyle01 : listStyle02}  className='flex self-center'>
