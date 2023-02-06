@@ -38,7 +38,7 @@ export default function NavBar(props) {
       {/* <li className='font-semibold' style={{padding:5, fontSize:12}}><Link href="/">ACCOUNT</Link></li> */}
       </div>
     </ul>
-      {isOpen && <Cart setIsOpen={setIsOpen} />}
+      {isOpen && <Cart windowDimensions={props.windowDimensions} setIsOpen={setIsOpen} />}
     </div>
   )
 }
