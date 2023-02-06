@@ -231,7 +231,7 @@ const Home = ({ alertOnBottom }) => {
   >
 
 {shoes.map((shoe, index) => {
-            return (<ListItem key={index} index={index} shoe={shoe}/>)
+            return (<ListItem windowDimensions={windowDimensions} key={index} index={index} shoe={shoe}/>)
           })}
   </motion.ul>
         </div>
