@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import {useState, useEffect} from 'react'
 import NavBar from '../../NavBar'
 import Select from "react-dropdown-select";
+import toast, { Toaster } from 'react-hot-toast';
 
 const Shoe = () => {
   const [ shoe, setShoe ] = useState([])
@@ -108,6 +109,14 @@ const Shoe = () => {
         }
       }
     }
+    toast(`Added to Cart`, {
+      position: 'bottom-right',
+      style: {
+        background: '#2196f3',
+        color: '#fff',
+      },
+      duration: 2000,
+    });
   }
 
   useEffect(() => {
@@ -187,6 +196,7 @@ const Shoe = () => {
       </div>
       </div>
     </div>
+    <Toaster />
     </div>
 }
 
