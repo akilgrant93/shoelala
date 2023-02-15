@@ -7,17 +7,11 @@ import NavBar from "../NavBar"
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import { motion } from "framer-motion"
 import { useSelector, useDispatch } from "react-redux"
-import { SET_NAME } from "@/redux/reducers/profile"
+import { SET_CART } from "@/redux/reducers/cart"
 
 const Home = ({ alertOnBottom }) => {
-  const name2 = useRef()
-
-  const {name} = useSelector((state => state.profile))
+  const { cart } = useSelector((state => state))
   const dispatch = useDispatch()
-
-  const useName = () => {
-    dispatch(SET_NAME(name2.current.value))
-  }
 
   const [shoes, setShoes] = useState([])
   const [windowDimensions, setWindowDimensions] = useState(1);
@@ -125,6 +119,23 @@ const Home = ({ alertOnBottom }) => {
       }
     )
 
+    if(firebase.auth().currentUser){
+      const cartRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart')
+
+      cartRef
+      .onSnapshot(
+        querySnapshot => {
+          const cartObj = {}
+          let subtotal = 0
+          querySnapshot.forEach((item) => {
+            cartObj[item.id] = {...item.data()}
+            subtotal = subtotal + item.data().price * item.data().qty
+          })
+          dispatch(SET_CART(cartObj))
+        }
+        )
+      }
+
     function handleResize() {
       setWindowDimensions({width:window.innerWidth, height:window.innerHeight});
     }
@@ -135,7 +146,7 @@ const Home = ({ alertOnBottom }) => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
     };
-    }, [selectedBrand, limit, priceMaximum, priceMinimum])
+    }, [selectedBrand, limit, priceMaximum, priceMinimum, dispatch])
 
     const getNextShoes = () => {
       let shoesRef

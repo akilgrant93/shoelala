@@ -9,9 +9,6 @@ const profileSlice = createSlice({
   reducers: {
     SET_NAME(state, action){
       state.name = action.payload
-    },
-    SET_CART(state, action){
-      state.name = action.payload
     }
   }
 })
