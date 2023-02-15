@@ -86,6 +86,15 @@ export default function Cart(props) {
     event.target.style.backgroundColor="rgb(203 213 225)";
   }
 
+  const clearCart = () => {
+    firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart').get().then(querySnapshot => {
+      querySnapshot.docs.forEach(snapshot => {
+        snapshot.ref.delete();
+      })
+    })
+    dispatch(SET_CART({}))
+  }
+
   return (
     <motion.div variants={list} initial='hidden' animate='visible' style={props.windowDimensions.width < 1024 ? bgStyle01 : bgStyle02}>
 
@@ -123,7 +132,7 @@ export default function Cart(props) {
     {/* <Link href="/checkout"> */}
       <p onClick={() => {console.log('checkout attempt')}} className='py-3 text-white px-5 bg-red-500 font-bold hover:bg-red-700 text-center self-center cursor-pointer mt-2 rounded-md'>CHECKOUT</p>
       {/* </Link> */}
-      <p onClick={() => {console.log('clear cart attempt')}} style={{fontSize:10, backgroundColor:'rgb(203 213 225)', width:'70px', marginLeft: 'auto', marginRight: 'auto'}} onMouseOver={MouseOver} onMouseOut={MouseOut} className='p-2 text-center self-center cursor-pointer mt-2 rounded-lg'>Clear Cart</p>
+      {Object.entries(cart.name).length > 0 ? <p onClick={() => {clearCart()}} style={{fontSize:10, backgroundColor:'rgb(203 213 225)', width:'70px', marginLeft: 'auto', marginRight: 'auto'}} onMouseOver={MouseOver} onMouseOut={MouseOut} className='p-2 text-center self-center cursor-pointer mt-2 rounded-lg'>Clear Cart</p> : null}
       {/* </Link> */}
     </div>
 
