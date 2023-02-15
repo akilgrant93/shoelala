@@ -53,7 +53,6 @@ export default function Cart(props) {
       delete cartObj[data.title]
       shoeRef.delete()
     } else {
-      cartObj[data.title].qty = e.target.value
       shoeRef.update({qty: e.target.value})
     }
     dispatch(SET_CART(cartObj))
@@ -79,6 +78,13 @@ export default function Cart(props) {
         )
       }
   }, [dispatch])
+
+  function MouseOver(event) {
+    event.target.style.backgroundColor = 'rgb(226 232 240)';
+  }
+  function MouseOut(event){
+    event.target.style.backgroundColor="rgb(203 213 225)";
+  }
 
   return (
     <motion.div variants={list} initial='hidden' animate='visible' style={props.windowDimensions.width < 1024 ? bgStyle01 : bgStyle02}>
@@ -115,7 +121,9 @@ export default function Cart(props) {
       </div>
     <p style={{fontSize:10, textAlign:'center'}}>Taxes and shipping calculated at checkout</p>
     {/* <Link href="/checkout"> */}
-      <p className='py-3 text-white px-5 bg-red-500 font-bold hover:bg-red-700 text-center self-center cursor-pointer mt-2 rounded-md'>CHECKOUT</p>
+      <p onClick={() => {console.log('checkout attempt')}} className='py-3 text-white px-5 bg-red-500 font-bold hover:bg-red-700 text-center self-center cursor-pointer mt-2 rounded-md'>CHECKOUT</p>
+      {/* </Link> */}
+      <p onClick={() => {console.log('clear cart attempt')}} style={{fontSize:10, backgroundColor:'rgb(203 213 225)', width:'70px', marginLeft: 'auto', marginRight: 'auto'}} onMouseOver={MouseOver} onMouseOut={MouseOut} className='p-2 text-center self-center cursor-pointer mt-2 rounded-lg'>Clear Cart</p>
       {/* </Link> */}
     </div>
 
