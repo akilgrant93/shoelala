@@ -1,6 +1,6 @@
 import { firebase } from "config"
 import Head from "next/head"
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useRef} from 'react'
 import ListItem from "../ListItem"
 import NavBar from "../NavBar"
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
@@ -48,7 +48,7 @@ export default function Nike({ alertOnBottom }) {
   useEffect(() => {
     const handleScroll = event => {
       setScrollTop(window.scrollY);
-    };
+  };
 
     window.addEventListener('scroll', handleScroll);
 
@@ -79,7 +79,6 @@ export default function Nike({ alertOnBottom }) {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
     };
-
 
     }, [])
     const getNextShoes = () => {
@@ -136,7 +135,6 @@ export default function Nike({ alertOnBottom }) {
     initial="hidden"
     animate="visible"
   >
-
 {shoes.map((shoe, index) => {
             return (<ListItem windowDimensions={windowDimensions} key={index} index={index} shoe={shoe}/>)
           })}

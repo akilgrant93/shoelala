@@ -5,13 +5,19 @@ import {useState, useEffect} from 'react'
 import NavBar from '../../NavBar'
 import Select from "react-dropdown-select";
 import toast, { Toaster } from 'react-hot-toast';
+import { useSelector, useDispatch } from "react-redux"
+import { SET_CART, SET_NAME } from "@/redux/reducers/cart"
 
 const Shoe = () => {
   const [ shoe, setShoe ] = useState([])
-  const [ cart, setCart ] = useState([])
   const [ selectedSize, setSelectedSize ] = useState(null)
   const router = useRouter()
   const [windowDimensions, setWindowDimensions] = useState(1);
+
+  const { cart } = useSelector((state => state))
+  const {name} = useSelector((state => state.profile))
+
+  const dispatch = useDispatch()
 
   const options = [
     {value:3.5},
@@ -44,12 +50,34 @@ const Shoe = () => {
     setSelectedSize(e.target.innerText)
   }
 
-  const addToCart = async () => {
+function throttle(fn, threshhold, scope) {
+  threshhold || (threshhold = 250);
+  let last,
+      deferTimer;
+  return function () {
+    let context = scope || this;
+
+    let now = +new Date,
+        args = arguments;
+    if (last && now < last + threshhold) {
+      clearTimeout(deferTimer);
+      deferTimer = setTimeout(function () {
+        last = now;
+        fn.apply(context, args);
+      }, threshhold);
+    } else {
+      last = now;
+      fn.apply(context, args);
+    }
+  };
+}
+const addToCart = async () => {
     if(selectedSize === null){
       alert('Select a size!')
     }else {
       //if there is no user create a user
       if(!firebase.auth().currentUser){
+
       firebase.auth().signInAnonymously()
       .then(() => {
 
@@ -81,8 +109,8 @@ const Shoe = () => {
 
       })
       .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
+        let errorCode = error.code;
+        let errorMessage = error.message;
         // ...
       });
       }
@@ -92,13 +120,14 @@ const Shoe = () => {
 
         const shoeRef = await firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart').where('title', '==', `${shoe.title}`).get()
 
-        //if there is a shoe in the cart update it
+        //if there is a shoe in the cart update its quantity
         //this function will need to be tweaked to accomodate adding multiple copies of the same shoe, but of different sizes to the cart
         shoeRef.forEach(shoe => {
                 const docRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart').doc(shoe.id)
                 docRef.update({qty: shoe.data().qty+1});
         })
 
+        //if there is no shoe in the cart with this ID make one
         if(shoeRef.empty){
           const newUserCartItem = cartRef.doc(shoe.title)
           const cartItemData = {
@@ -108,15 +137,16 @@ const Shoe = () => {
             .set(cartItemData)
         }
       }
+      dispatch(SET_CART(cart))
+      toast(`Added to Cart`, {
+        position: 'bottom-right',
+        style: {
+          background: '#2196f3',
+          color: '#fff',
+        },
+        duration: 2000,
+      });
     }
-    toast(`Added to Cart`, {
-      position: 'bottom-right',
-      style: {
-        background: '#2196f3',
-        color: '#fff',
-      },
-      duration: 2000,
-    });
   }
 
   useEffect(() => {
@@ -144,11 +174,11 @@ const Shoe = () => {
         querySnapshot.forEach((item) => {
           cartObj[item.id] = {...item.data()}
         })
-        setCart(cartObj)
+        dispatch(SET_CART(cartObj))
       }
       )
-
     }
+
 
     function handleResize() {
       setWindowDimensions({width:window.innerWidth, height:window.innerHeight});
@@ -160,12 +190,10 @@ const Shoe = () => {
       window.removeEventListener('resize', handleResize);
     };
 
-  }, [router.query.id, cart])
+  }, [router.query.id, cart, dispatch])
 
   const containerStyle01 = {display:'flex', flexDirection:'column', alignItems:'center', marginBottom: '25%'}
-
   const containerStyle02 = {marginTop: 150, display:'flex'}
-
 
   return <div className='w-fit flex flex-col justify-between' style={{height:'100vh'}}>
     <Head>
@@ -176,6 +204,7 @@ const Shoe = () => {
     <NavBar windowDimensions={windowDimensions}/>
     <div style={windowDimensions.width < 1024 ? containerStyle01 : containerStyle02}>
       <div className='lg:w-1/2 p-10 text-sm'>
+
         {windowDimensions.width > 1024 ? <div style={{display:'flex', justifyContent:'center'}} className='font-bold'>
           <p>Shoelala</p><p>/</p><p>{shoe.category}</p><p>/</p>
         </div> : null}
@@ -192,7 +221,7 @@ const Shoe = () => {
       </div> : <Select labelField='value' valueField='value' options={options} onChange={(e) => setSelectedSize(e[0].value)} />}
       <div className='flex justify-center flex-col'>
       <p className='pt-6 pb-3 text-sm font-semibold text-center'>ADD TO CART</p>
-      <p onClick={addToCart} className='py-3 lg:w-1/3 text-white px-5 bg-red-500 font-bold hover:bg-red-700 text-center self-center cursor-pointer' >${shoe.price}</p>
+      <p onClick={throttle(addToCart, 1000)} className='py-3 lg:w-1/3 text-white px-5 bg-red-500 font-bold hover:bg-red-700 text-center self-center cursor-pointer' >${shoe.price}</p>
       </div>
       </div>
     </div>

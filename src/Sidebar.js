@@ -26,7 +26,7 @@ export default function Sidebar(props) {
         <li className='px-5 py-1 text-xs flex content-center'>
           <input
           type="checkbox"
-          checked={props.isJordan}
+          checked={props.selectedBrand === 'jordan' ? true : false}
           onChange={props.categoryChange}
           id="jordan"
           name="jordan"
@@ -35,7 +35,7 @@ export default function Sidebar(props) {
         <li className='px-5 py-1 text-xs flex content-center'>
           <input
           type="checkbox"
-          checked={props.isNike}
+          checked={props.selectedBrand === 'nike' ? true : false}
           onChange={props.categoryChange}
           id="nike"
           name="nike"
@@ -44,7 +44,7 @@ export default function Sidebar(props) {
         <li className='px-5 py-1 text-xs flex content-center'>
           <input
           type="checkbox"
-          checked={props.isAdidas}
+          checked={props.selectedBrand === 'adidas' ? true : false}
           onChange={props.categoryChange}
           id="adidas"
           name="adidas"
@@ -57,7 +57,7 @@ export default function Sidebar(props) {
         <li className='px-5 py-1 text-xs flex content-center'>
           <input
           type="checkbox"
-          checked={props.is20}
+          checked={props.limit === 20 ? true : false}
           onChange={props.itemAmountChange}
           id="20"
           name="20"
@@ -66,7 +66,7 @@ export default function Sidebar(props) {
         <li className='px-5 py-1 text-xs flex content-center'>
           <input
           type="checkbox"
-          checked={props.is40}
+          checked={props.limit === 40 ? true : false}
           onChange={props.itemAmountChange}
           id="40"
           name="40"
@@ -75,7 +75,7 @@ export default function Sidebar(props) {
         <li className='px-5 py-1 text-xs flex content-center'>
         <input
         type="checkbox"
-        checked={props.is100}
+        checked={props.limit === 100 ? true : false}
         onChange={props.itemAmountChange}
         id="100"
         name="100"
@@ -106,9 +106,6 @@ export default function Sidebar(props) {
         </form>
       </div>
       </div>
-
-
-
       </div>
   )
 }

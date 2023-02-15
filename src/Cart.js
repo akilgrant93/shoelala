@@ -4,11 +4,18 @@ import { firebase } from 'config'
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { motion } from "framer-motion"
 // import Link from 'next/link'
+import { Spinner } from "react-activity";
+import "react-activity/dist/library.css";
+import { useSelector, useDispatch } from "react-redux"
+import { SET_CART } from "@/redux/reducers/cart"
 
 export default function Cart(props) {
-  const [ cartObj, setCartObj ] = useState({}
-  )
+
+  const { cart } = useSelector((state => state))
+  const {name} = useSelector((state => state.profile))
+  const dispatch = useDispatch()
   const [ total, setTotal ] = useState(0)
+  const [ loading, setLoading ] = useState(true)
 
   const list = {
     visible: {
@@ -42,15 +49,15 @@ export default function Cart(props) {
   const changeQuantity = (e, data) => {
     const shoeRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart').doc(data.title)
 
-    let cart = cartObj
+    let cartObj = cart
     if(e.target.value === '0'){
-      delete cart[data.title]
+      delete cartObj[data.title]
       shoeRef.delete()
     } else {
-      cart[data.title].qty = e.target.value
+      cartObj[data.title].qty = e.target.value
       shoeRef.update({qty: e.target.value})
     }
-    setCartObj(cart)
+    dispatch(SET_CART(cartObj))
   }
 
   useEffect(() => {
@@ -66,11 +73,11 @@ export default function Cart(props) {
             cartObj[item.id] = {...item.data()}
             subtotal = subtotal + item.data().price * item.data().qty
           })
-          setCartObj(cartObj)
+          dispatch(SET_CART(cartObj))
           setTotal(subtotal)
+          setLoading(false)
         }
         )
-
       }
   }, [])
 
@@ -81,11 +88,12 @@ export default function Cart(props) {
 
       <div style={{height:'100%', overflowY:'scroll'}}>
       <p style={{fontWeight: 'bold',fontSize: 10,paddingBottom: '.5rem', borderBottomWidth: 1, borderBottomColor: 'black',}}>CART</p>
-      {Object.entries(cartObj).length > 0 ? Object.entries(cartObj).map((item, idx) => {
-        return <CartItem changeQuantity={changeQuantity} key={idx} lastIdx={Object.entries(cartObj).length-1} item={item[1]}/>
+      {loading ? <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', fontSize: 10, marginTop: '35%'}}><Spinner /><p>Cart Loading</p></div> : null}
+      {Object.entries(cart.name).length > 0 ? Object.entries(cart.name).map((item, idx) => {
+        return <CartItem changeQuantity={changeQuantity} key={idx} lastIdx={Object.entries(cart.name).length-1} item={item[1]}/>
       }
       ) : null }
-      {Object.entries(cartObj).length > 0 ? null : <div style={{height:'100%', display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}}><AiOutlineShoppingCart size={45}/><p style={{textAlign:'center', fontSize:10, marginTop: '.5rem'}}>Your cart is empty</p></div> }
+      {Object.entries(cart.name).length > 0 ? null : <div style={{height:'100%', display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}}><AiOutlineShoppingCart size={45}/><p style={{textAlign:'center', fontSize:10, marginTop: '.5rem'}}>Your cart is empty</p></div> }
       </div>
 
 

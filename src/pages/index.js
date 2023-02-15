@@ -1,27 +1,29 @@
 import { firebase } from "config"
 import Head from "next/head"
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useRef} from 'react'
 import ListItem from "../ListItem"
 import Sidebar from "../Sidebar"
 import NavBar from "../NavBar"
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import { motion } from "framer-motion"
+import { useSelector, useDispatch } from "react-redux"
+import { SET_NAME } from "@/redux/reducers/profile"
 
 const Home = ({ alertOnBottom }) => {
+  const name2 = useRef()
+
+  const {name} = useSelector((state => state.profile))
+  const dispatch = useDispatch()
+
+  const useName = () => {
+    dispatch(SET_NAME(name2.current.value))
+  }
+
   const [shoes, setShoes] = useState([])
   const [windowDimensions, setWindowDimensions] = useState(1);
   const [ selectedBrand, setSelectedBrand ] = useState(false)
-  const [ firstEntry, setFirstEntry ] = useState('')
-  const [ firstVisibleDoc, setFirstVisibleDoc ] = useState("");
   const [ lastVisibleDoc, setLastVisibleDoc ] = useState("");
-  const [loadMore, setLoadMore] = useState(false);//certain actions are performed in useFirestore.jsx in order to make loadMore properly work
   const [scrollTop, setScrollTop] = useState(0);
-  const [ isAdidas, setIsAdidas ] = useState(false)
-  const [ isNike, setIsNike ] = useState(false)
-  const [ isJordan, setIsJordan ] = useState(false)
-  const [ is20, setIs20 ] = useState(true)
-  const [ is40, setIs40 ] = useState(false)
-  const [ is100, setIs100 ] = useState(false)
   const [ limit, setLimit ] = useState(20)
   const [ priceMinimum, setPriceMinimum ] = useState('')
   const [ priceMaximum, setPriceMaximum ] = useState('')
@@ -40,48 +42,26 @@ const Home = ({ alertOnBottom }) => {
     }
   };
 
-
   const categoryChange = (e) => {
     if(e.target.id === 'adidas'){
-      setIsAdidas(!isAdidas)
       if(selectedBrand !== 'adidas'){setSelectedBrand('adidas')}
-      if(selectedBrand === 'adidas'){setSelectedBrand(false)}
-
-      if(isJordan){setIsJordan(!isJordan)}
-      if(isNike){setIsNike(!isNike)}
+      else{setSelectedBrand(false)}
     } else if (e.target.id === 'nike'){
-      setIsNike(!isNike)
       if(selectedBrand !== 'nike'){setSelectedBrand('nike')}
-      if(selectedBrand === 'nike'){setSelectedBrand(false)}
-
-      if(isAdidas){setIsAdidas(!isAdidas)}
-      if(isJordan){setIsJordan(!isJordan)}
+      else{setSelectedBrand(false)}
     } else if (e.target.id === 'jordan'){
-      setIsJordan(!isJordan)
       if(selectedBrand !== 'jordan'){setSelectedBrand('jordan')}
-      if(selectedBrand === 'jordan'){setSelectedBrand(false)}
-
-      if(isNike){setIsNike(!isNike)}
-      if(isAdidas){setIsAdidas(!isAdidas)}
+      else{setSelectedBrand(false)}
     }
   };
 
   const itemAmountChange = (e) => {
     if(e.target.id === '20'){
-      setIs20(!is20)
       setLimit(20)
-      if(is40){setIs40(!is40)}
-      if(is100){setIs100(!is100)}
     } else if (e.target.id === '40'){
-      setIs40(!is40)
       setLimit(40)
-      if(is20){setIs20(!is20)}
-      if(is100){setIs100(!is100)}
     } else if (e.target.id === '100'){
-      setIs100(!is100)
       setLimit(100)
-      if(is20){setIs20(!is20)}
-      if(is40){setIs40(!is40)}
     }
   };
 
@@ -141,8 +121,6 @@ const Home = ({ alertOnBottom }) => {
           shoesArr.push({...shoe.data(), id: shoe.id})
         })
         setShoes(shoesArr)
-        setFirstEntry(shoesArr[0])
-        setFirstVisibleDoc(shoesArr[0])
         setLastVisibleDoc(shoesArr[shoesArr.length-1])
       }
     )
@@ -183,7 +161,6 @@ const Home = ({ alertOnBottom }) => {
           shoesArr.push({...shoe.data(), id: shoe.id})
         })
         setShoes([...shoes,...shoesArr])
-        setFirstVisibleDoc(shoesArr[0])
         setLastVisibleDoc(shoesArr[shoesArr.length-1])
       }
       )
@@ -195,8 +172,6 @@ const Home = ({ alertOnBottom }) => {
     const synposisStyle02 = {
       backgroundColor:'rgba(255,255,255,.75)'
     };
-
-    // console.log(windowDimensions)
 
   return (
     <div className="w-fit">
@@ -220,7 +195,7 @@ const Home = ({ alertOnBottom }) => {
         </div>
 
         <div style={{boxShadow: '0px -2px 5px rgba(0,0,0,.5)'}} className="flex flex-col lg:flex-row pt-5 pb-20 w-full bg-slate-100">
-        <Sidebar windowDimensions={windowDimensions} priceMaximum={priceMaximum} maximumChange={maximumChange} priceMinimum={priceMinimum} minimumChange={minimumChange} itemAmountChange={itemAmountChange} is20={is20} is40={is40} is100={is100} isNike={isNike} isJordan={isJordan} isAdidas={isAdidas} categoryChange={categoryChange}/>
+        <Sidebar windowDimensions={windowDimensions} priceMaximum={priceMaximum} maximumChange={maximumChange} priceMinimum={priceMinimum} minimumChange={minimumChange} itemAmountChange={itemAmountChange} selectedBrand={selectedBrand} limit={limit} categoryChange={categoryChange}/>
         <div>
 <motion.ul
     style={windowDimensions.width < 1024 ? {justifyContent:'center'} : null}
