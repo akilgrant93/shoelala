@@ -86,13 +86,20 @@ export default function Cart(props) {
 
       <div style={props.windowDimensions.width < 1024 ? cartStyle01 : cartStyle02} className='shadow-lg'>
 
-      <div style={{height:'100%', overflowY:'scroll'}}>
+      <div
+      style={{height:'100%',overflow: 'hidden',
+    position: 'relative',}}
+    >
       <p style={{fontWeight: 'bold',fontSize: 10,paddingBottom: '.5rem', borderBottomWidth: 1, borderBottomColor: 'black',}}>CART</p>
       {loading ? <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', fontSize: 10, marginTop: '35%'}}><Spinner /><p>Cart Loading</p></div> : null}
+      <div
+      style={{position: 'absolute', top: 25, left: 0, bottom: '-20px', right: '-20px', paddingRight:'20px', overflow: 'scroll'}}
+      >
       {Object.entries(cart.name).length > 0 ? Object.entries(cart.name).map((item, idx) => {
         return <CartItem changeQuantity={changeQuantity} key={idx} lastIdx={Object.entries(cart.name).length-1} item={item[1]}/>
       }
       ) : null }
+      </div>
       {Object.entries(cart.name).length > 0 ? null : <div style={{height:'100%', display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}}><AiOutlineShoppingCart size={45}/><p style={{textAlign:'center', fontSize:10, marginTop: '.5rem'}}>Your cart is empty</p></div> }
       </div>
 
