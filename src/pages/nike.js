@@ -130,7 +130,7 @@ export default function Nike({ alertOnBottom }) {
         <div className="flex pt-5 pb-20 w-full bg-slate-100">
 <motion.ul
     style={windowDimensions.width < 1024 ? {justifyContent:'center'} : null}
-    className='flex flex-wrap pb-10 max-h-8/10'
+    className='flex justify-center flex-wrap pb-10 max-h-8/10'
     variants={list}
     initial="hidden"
     animate="visible"
