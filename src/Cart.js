@@ -8,6 +8,7 @@ import { Spinner } from "react-activity";
 import "react-activity/dist/library.css";
 import { useSelector, useDispatch } from "react-redux"
 import { SET_CART } from "@/redux/reducers/cart"
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Cart(props) {
   const { cart } = useSelector((state => state))
@@ -81,19 +82,15 @@ export default function Cart(props) {
 
   const deleteEntry = (data) => {
     const shoeRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart').doc(data.title)
-
     shoeRef.delete()
-
-    // console.log(data.title)
-
-    // let cartObj = cart
-    // if(e.target.value === '0'){
-    //   delete cartObj[data.title]
-    //   shoeRef.delete()
-    // } else {
-    //   shoeRef.update({qty: e.target.value})
-    // }
-    // dispatch(SET_CART(cartObj))
+    toast(`Removed from Cart`, {
+      position: 'bottom-right',
+      style: {
+        background: 'red',
+        color: '#fff',
+      },
+      duration: 2000,
+    });
   }
 
   return (
@@ -136,6 +133,7 @@ export default function Cart(props) {
     </div>
 
       </div>
+      <Toaster />
     </motion.div>
 
   )
