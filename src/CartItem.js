@@ -1,4 +1,5 @@
 import React from 'react'
+import { MdDeleteForever } from "react-icons/md";
 
 export default function CartItem(props) {
   return (
@@ -8,6 +9,7 @@ export default function CartItem(props) {
       <p style={{textAlign:'end', paddingLeft: '2.5rem'}} className='text-xs'>{props.item.title}</p>
       </div>
       <div style={{display:'flex', justifyContent:'flex-end'}}>
+      <MdDeleteForever onClick={() => props.deleteEntry(props.item)} style={{alignSelf:'center', color:'red'}} />
       <input
       style={{marginLeft: '.5rem', paddingLeft: '.5rem', paddingRight: '.5rem', width: '3rem', height:'1.25rem'}}
       className='bg-slate-100 rounded-sm text-xs'

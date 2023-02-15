@@ -79,6 +79,23 @@ export default function Cart(props) {
       }
   }, [dispatch])
 
+  const deleteEntry = (data) => {
+    const shoeRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart').doc(data.title)
+
+    shoeRef.delete()
+
+    // console.log(data.title)
+
+    // let cartObj = cart
+    // if(e.target.value === '0'){
+    //   delete cartObj[data.title]
+    //   shoeRef.delete()
+    // } else {
+    //   shoeRef.update({qty: e.target.value})
+    // }
+    // dispatch(SET_CART(cartObj))
+  }
+
   return (
     <motion.div variants={list} initial='hidden' animate='visible' style={props.windowDimensions.width < 1024 ? bgStyle01 : bgStyle02}>
 
@@ -94,7 +111,7 @@ export default function Cart(props) {
       style={{position: 'absolute', top: 25, left: 0, bottom: '-20px', right: '-20px', marginBottom: 20,paddingRight:'20px', overflow: 'scroll'}}
       >
       {Object.entries(cart.name).length > 0 ? Object.entries(cart.name).map((item, idx) => {
-        return <CartItem changeQuantity={changeQuantity} idx={idx} key={idx} lastIdx={Object.entries(cart.name).length-1} item={item[1]}/>
+        return <CartItem deleteEntry={deleteEntry} changeQuantity={changeQuantity} idx={idx} key={idx} lastIdx={Object.entries(cart.name).length-1} item={item[1]}/>
       }
       ) : null }
       </div>
