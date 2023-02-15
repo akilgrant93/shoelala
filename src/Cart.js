@@ -115,7 +115,6 @@ export default function Cart(props) {
     position: 'relative',}}
     >
       <p style={{fontWeight: 'bold',fontSize: 10,paddingBottom: '.5rem', borderBottomWidth: 1, borderBottomColor: 'black',}}>CART</p>
-      {loading ? <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', fontSize: 10, marginTop: '30%', marginBottom:'5%'}}><Spinner /><p>Cart Loading</p></div> : null}
       <div
       style={{position: 'absolute', top: 25, left: 0, bottom: '-20px', right: '-20px', marginBottom: 20,paddingRight:'20px', overflow: 'scroll'}}
       >
