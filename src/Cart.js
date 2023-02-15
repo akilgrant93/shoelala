@@ -8,6 +8,7 @@ import { Spinner } from "react-activity";
 import "react-activity/dist/library.css";
 import { useSelector, useDispatch } from "react-redux"
 import { SET_CART } from "@/redux/reducers/cart"
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Cart(props) {
   const { cart } = useSelector((state => state))
@@ -59,6 +60,7 @@ export default function Cart(props) {
   }
 
   useEffect(() => {
+    // console.log(cart)
     if(firebase.auth().currentUser){
       const cartRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart')
 
@@ -72,12 +74,13 @@ export default function Cart(props) {
             subtotal = subtotal + item.data().price * item.data().qty
           })
           dispatch(SET_CART(cartObj))
+          // console.log(cartObj)
           setTotal(subtotal)
           setLoading(false)
         }
         )
       }
-  }, [dispatch])
+  }, [dispatch, cart])
 
   function MouseOver(event) {
     event.target.style.backgroundColor = 'rgb(226 232 240)';
@@ -92,7 +95,14 @@ export default function Cart(props) {
         snapshot.ref.delete();
       })
     })
-    dispatch(SET_CART({}))
+    toast(`Cart emptied`, {
+      position: 'bottom-right',
+      style: {
+        background: '#2196f3',
+        color: '#fff',
+      },
+      duration: 2000,
+    });
   }
 
   return (
@@ -137,7 +147,7 @@ export default function Cart(props) {
     </div>
 
       </div>
+    <Toaster />
     </motion.div>
-
   )
 }
