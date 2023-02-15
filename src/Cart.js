@@ -93,10 +93,10 @@ export default function Cart(props) {
       <p style={{fontWeight: 'bold',fontSize: 10,paddingBottom: '.5rem', borderBottomWidth: 1, borderBottomColor: 'black',}}>CART</p>
       {loading ? <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', fontSize: 10, marginTop: '35%'}}><Spinner /><p>Cart Loading</p></div> : null}
       <div
-      style={{position: 'absolute', top: 25, left: 0, bottom: '-20px', right: '-20px', paddingRight:'20px', overflow: 'scroll'}}
+      style={{position: 'absolute', top: 25, left: 0, bottom: '-20px', right: '-20px', marginBottom: 20,paddingRight:'20px', overflow: 'scroll'}}
       >
       {Object.entries(cart.name).length > 0 ? Object.entries(cart.name).map((item, idx) => {
-        return <CartItem changeQuantity={changeQuantity} key={idx} lastIdx={Object.entries(cart.name).length-1} item={item[1]}/>
+        return <CartItem changeQuantity={changeQuantity} idx={idx} key={idx} lastIdx={Object.entries(cart.name).length-1} item={item[1]}/>
       }
       ) : null }
       </div>
