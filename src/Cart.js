@@ -8,7 +8,6 @@ import { Spinner } from "react-activity";
 import "react-activity/dist/library.css";
 import { useSelector, useDispatch } from "react-redux"
 import { SET_CART } from "@/redux/reducers/cart"
-import toast, { Toaster } from 'react-hot-toast';
 
 export default function Cart(props) {
   const { cart } = useSelector((state => state))
@@ -60,7 +59,6 @@ export default function Cart(props) {
   }
 
   useEffect(() => {
-    // console.log(cart)
     if(firebase.auth().currentUser){
       const cartRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart')
 
@@ -74,36 +72,12 @@ export default function Cart(props) {
             subtotal = subtotal + item.data().price * item.data().qty
           })
           dispatch(SET_CART(cartObj))
-          // console.log(cartObj)
           setTotal(subtotal)
           setLoading(false)
         }
         )
       }
-  }, [dispatch, cart])
-
-  function MouseOver(event) {
-    event.target.style.backgroundColor = 'rgb(226 232 240)';
-  }
-  function MouseOut(event){
-    event.target.style.backgroundColor="rgb(203 213 225)";
-  }
-
-  const clearCart = () => {
-    firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).collection('cart').get().then(querySnapshot => {
-      querySnapshot.docs.forEach(snapshot => {
-        snapshot.ref.delete();
-      })
-    })
-    toast(`Cart emptied`, {
-      position: 'bottom-right',
-      style: {
-        background: '#2196f3',
-        color: '#fff',
-      },
-      duration: 2000,
-    });
-  }
+  }, [dispatch])
 
   return (
     <motion.div variants={list} initial='hidden' animate='visible' style={props.windowDimensions.width < 1024 ? bgStyle01 : bgStyle02}>
@@ -115,6 +89,7 @@ export default function Cart(props) {
     position: 'relative',}}
     >
       <p style={{fontWeight: 'bold',fontSize: 10,paddingBottom: '.5rem', borderBottomWidth: 1, borderBottomColor: 'black',}}>CART</p>
+      {loading ? <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', fontSize: 10, marginTop: '30%', marginBottom:'5%'}}><Spinner /><p>Cart Loading</p></div> : null}
       <div
       style={{position: 'absolute', top: 25, left: 0, bottom: '-20px', right: '-20px', marginBottom: 20,paddingRight:'20px', overflow: 'scroll'}}
       >
@@ -139,14 +114,12 @@ export default function Cart(props) {
       </div>
     <p style={{fontSize:10, textAlign:'center'}}>Taxes and shipping calculated at checkout</p>
     {/* <Link href="/checkout"> */}
-      <p onClick={() => {console.log('checkout attempt')}} className='py-3 text-white px-5 bg-red-500 font-bold hover:bg-red-700 text-center self-center cursor-pointer mt-2 rounded-md'>CHECKOUT</p>
-      {/* </Link> */}
-      {Object.entries(cart.name).length > 0 ? <p onClick={() => {clearCart()}} style={{fontSize:10, backgroundColor:'rgb(203 213 225)', width:'70px', marginLeft: 'auto', marginRight: 'auto'}} onMouseOver={MouseOver} onMouseOut={MouseOut} className='p-2 text-center self-center cursor-pointer mt-2 rounded-lg'>Clear Cart</p> : null}
+      <p onPress={() => {console.log('checkout attempt')}} className='py-3 text-white px-5 bg-red-500 font-bold hover:bg-red-700 text-center self-center cursor-pointer mt-2 rounded-md'>CHECKOUT</p>
       {/* </Link> */}
     </div>
 
       </div>
-    <Toaster />
     </motion.div>
+
   )
 }
