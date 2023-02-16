@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import CartItem from './CartItem'
+import Checkout from './Checkout'
 import { firebase } from 'config'
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { motion } from "framer-motion"
@@ -16,6 +17,7 @@ export default function Cart(props) {
   const dispatch = useDispatch()
   const [ total, setTotal ] = useState(0)
   const [ loading, setLoading ] = useState(true)
+  const [ checkingOut, setCheckingOut ] = useState(false)
 
   const list = {
     visible: {
@@ -96,7 +98,8 @@ export default function Cart(props) {
   return (
     <motion.div variants={list} initial='hidden' animate='visible' style={props.windowDimensions.width < 1024 ? bgStyle01 : bgStyle02}>
 
-      <div style={props.windowDimensions.width < 1024 ? cartStyle01 : cartStyle02} className='shadow-lg'>
+      {checkingOut === false
+      ? <div style={props.windowDimensions.width < 1024 ? cartStyle01 : cartStyle02} className='shadow-lg'>
 
       <div
       style={{height:'100%',overflow: 'hidden',
@@ -119,6 +122,7 @@ export default function Cart(props) {
     <p style={props.windowDimensions.width < 1024 ? cancelStyle01 : cancelStyle02} className='cursor-pointer shadow-lg'
     onClick={() => {
       props.setIsOpen(false)
+      setCheckingOut(false)
     }}>X</p>
 
     <div>
@@ -128,11 +132,22 @@ export default function Cart(props) {
       </div>
     <p style={{fontSize:10, textAlign:'center'}}>Taxes and shipping calculated at checkout</p>
     {/* <Link href="/checkout"> */}
-      <p onClick={() => {console.log('checkout attempt??????')}} className='py-3 text-white px-5 bg-red-500 font-bold hover:bg-red-700 text-center self-center cursor-pointer mt-2 rounded-md'>CHECKOUT</p>
+      <p onClick={() => {setCheckingOut(true)}} className='py-3 text-white px-5 bg-red-500 font-bold hover:bg-red-700 text-center self-center cursor-pointer mt-2 rounded-md'>CHECKOUT</p>
       {/* </Link> */}
     </div>
 
       </div>
+      : <div style={props.windowDimensions.width < 1024 ? cartStyle01 : cartStyle02} className='shadow-lg'>
+
+        <p style={props.windowDimensions.width < 1024 ? cancelStyle01 : cancelStyle02} className='cursor-pointer shadow-lg'
+    onClick={() => {
+      props.setIsOpen(false)
+      setCheckingOut(false)
+    }}>X</p>
+
+    <Checkout />
+
+        </div>}
       <Toaster />
     </motion.div>
 
