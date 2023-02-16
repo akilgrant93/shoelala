@@ -86,7 +86,7 @@ export default function Cart(props) {
     toast(`Removed from Cart`, {
       position: 'bottom-right',
       style: {
-        background: 'red',
+        background: 'rgb(185 28 28)',
         color: '#fff',
       },
       duration: 2000,
@@ -128,7 +128,7 @@ export default function Cart(props) {
       </div>
     <p style={{fontSize:10, textAlign:'center'}}>Taxes and shipping calculated at checkout</p>
     {/* <Link href="/checkout"> */}
-      <p onPress={() => {console.log('checkout attempt')}} className='py-3 text-white px-5 bg-red-500 font-bold hover:bg-red-700 text-center self-center cursor-pointer mt-2 rounded-md'>CHECKOUT</p>
+      <p onClick={() => {console.log('checkout attempt??????')}} className='py-3 text-white px-5 bg-red-500 font-bold hover:bg-red-700 text-center self-center cursor-pointer mt-2 rounded-md'>CHECKOUT</p>
       {/* </Link> */}
     </div>
 
